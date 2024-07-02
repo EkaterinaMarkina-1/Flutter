@@ -76,7 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   int _calculateCategoryIndex(double offset) {
-    return (offset / 450).floor();
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    return maxScroll == 0 ? 0 : (offset / maxScroll).floor();
   }
 
   void _scrollListener() {
