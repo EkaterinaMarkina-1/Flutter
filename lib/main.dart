@@ -5,36 +5,35 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    MaterialColor primarySwatch = MaterialColor(0xFFEBE0B6, {
-      50: Color(0xFFEBE0B6),
-      100: Color(0xFFEBE0B6),
-      200: Color(0xFFEBE0B6),
-      300: Color(0xFFEBE0B6),
-      400: Color(0xFFEBE0B6),
-      500: Color(0xFFEBE0B6),
-      600: Color(0xFFEBE0B6),
-      700: Color(0xFFEBE0B6),
-      800: Color(0xFFEBE0B6),
-      900: Color(0xFFEBE0B6),
-    });
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Кофейня',
       theme: ThemeData(
-        primarySwatch: primarySwatch,
+        primaryColor: Colors.white,
       ),
-      home: const MyHomePage(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Center(
+            child: Text(
+              "cofe fest",
+              style: TextStyle(
+                color: Colors.pink,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.grey[350],
+        ),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
