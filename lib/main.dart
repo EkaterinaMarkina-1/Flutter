@@ -57,13 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    //прокрутка
+    _scrollController.addListener(_scrollListener);
     _horizontalScrollController = ScrollController();
   }
 
   @override
   void dispose() {
-    //прокрутка
+    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     _horizontalScrollController.dispose();
     super.dispose();
@@ -73,6 +73,34 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       currentCategory = category;
     });
+  }
+
+  int _calculateCategoryIndex(double offset) {
+    return (offset / 450).floor();
+  }
+
+  void _scrollListener() {
+    int index = _calculateCategoryIndex(_scrollController.offset);
+
+    if (index >= 0 &&
+        index < categories.length &&
+        currentCategory != categories[index]) {
+      setState(() {
+        currentCategory = categories[index];
+
+        final screenWidth = MediaQuery.of(context).size.width;
+        final categoryWidth = categories.length * 200;
+
+        double scrollTo = index * 120.0 - (screenWidth - 120.0) / 2.0;
+        scrollTo = scrollTo.clamp(0, categoryWidth - screenWidth);
+
+        _horizontalScrollController.animateTo(
+          scrollTo,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      });
+    }
   }
 
   Widget _buildCategoryButton(String category) {
@@ -113,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Горизонтальное меню категорий
           const SizedBox(
             height: 20,
           ),
@@ -126,7 +153,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   .toList(),
             ),
           ),
-          // ...
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ...
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
