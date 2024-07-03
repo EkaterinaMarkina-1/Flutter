@@ -246,8 +246,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             "assets/imeges/2.jpg", "230 ₽"),
                       ],
                     ),
+                    Row(
+                      children: [
+                        _buildItem("Капучино", "assets/imeges/3.jpg", "200 ₽"),
+                        _buildItem("Капучино на альт. молоке", "assets/4.jpg",
+                            "260 ₽"),
+                      ],
+                    ),
                   ])
-                  // ...
                 ],
               ),
             ),
@@ -278,8 +284,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           const SizedBox(height: 5),
           Wrap(
-            spacing: 4.0, 
-            runSpacing: 2.0, 
+            spacing: 4.0,
+            runSpacing: 2.0,
             children: items,
           ),
         ],
