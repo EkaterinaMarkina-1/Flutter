@@ -253,7 +253,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             "260 ₽"),
                       ],
                     ),
-                  ])
+                  ]),
+                  _buildCategorySection("Авторский кофе", [
+                    Row(
+                      children: [
+                        _buildItem("Вьетнамская классика",
+                            "assets/imeges/5.jpg", "190 ₽"),
+                        _buildItem(
+                            "Кофе Бичерин", "assets/imeges/6.jpg", "210 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem(
+                            "Кофе Бон Бон", "assets/imeges/7.jpg", "220 ₽"),
+                        _buildItem("Кофе по-генуэзски на латте",
+                            "assets/imeges/8.jpg", "250 ₽"),
+                      ],
+                    ),
+                  ]),
                 ],
               ),
             ),
