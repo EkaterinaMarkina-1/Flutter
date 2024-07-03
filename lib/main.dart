@@ -11,9 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
+      theme: ThemeData(),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 45, 51, 73),
@@ -23,12 +21,10 @@ class MyApp extends StatelessWidget {
               'assets/icon/icon.png',
               fit: BoxFit
                   .contain, // Используем BoxFit.contain для сохранения пропорций
-              // height: AppBar()
-              //     .preferredSize
-              //     .height, // Высота изображения - высота AppBar
             ),
           ),
         ),
+        body: const MyHomePage(),
       ),
     );
   }
@@ -70,10 +66,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _selectCategory(String category) {
-    setState(() {
-      currentCategory = category;
-    });
+  setState(() {
+    currentCategory = category;
+  });
+
+  int index = categories.indexOf(category);
+  if (index != -1) {
+    _scrollController.jumpTo(
+      index * 610,
+    );
   }
+}
 
   int _calculateCategoryIndex(double offset) {
     double maxScroll = _scrollController.position.maxScrollExtent;
@@ -104,12 +107,33 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+// ignore: unused_element
+  String _determineCategoryInView() {
+    double position = 0.0;
+    String categoryInView;
+
+    for (int i = 0; i < categories.length; i++) {
+      RenderBox renderBox = context.findRenderObject() as RenderBox;
+      double itemPosition = renderBox.localToGlobal(Offset.zero).dy;
+
+      if (itemPosition >= 0 &&
+          itemPosition < MediaQuery.of(context).size.height) {
+        position = i.toDouble();
+        break;
+      }
+    }
+
+    categoryInView = categories[position.toInt()];
+
+    return categoryInView;
+  }
+
   Widget _buildItem(String itemName, String imageUrl, String cost) {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 150,
-        height: 210,
+        width: 160,
+        height: 280,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
@@ -119,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
-              blurRadius: 5,
+              blurRadius: 4,
               offset: const Offset(0, 3),
             ),
           ],
@@ -129,8 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 100,
-              height: 100,
+              width: 115,
+              height: 115,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
@@ -142,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             SizedBox(
                 width: 160,
-                height: 75,
+                height: 70,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -151,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 45, 51, 73),
                         ),
                       ),
                     ])),
@@ -163,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: ElevatedButton.styleFrom(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
-                    backgroundColor: const Color.fromRGBO(133, 195, 222, 1),
+                    backgroundColor: const Color.fromARGB(255, 254, 178, 157),
                     textStyle: const TextStyle(color: Colors.white),
                   ),
                   child: Text(
@@ -190,10 +215,10 @@ class _MyHomePageState extends State<MyHomePage> {
           _selectCategory(category);
         },
         child: Container(
-          height: 26,
+          height: 36,
           decoration: BoxDecoration(
             color: currentCategory == category
-                ? const Color.fromARGB(255, 255, 174, 174)
+                ? const Color.fromARGB(255, 254, 178, 157)
                 : Colors.grey[300],
             borderRadius: BorderRadius.circular(16),
           ),
@@ -203,8 +228,8 @@ class _MyHomePageState extends State<MyHomePage> {
               category,
               style: TextStyle(
                 color: currentCategory == category
-                    ? const Color.fromARGB(255, 255, 158, 158)
-                    : Colors.grey[500],
+                    ? Colors.white
+                    : const Color.fromARGB(255, 45, 51, 73),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -272,6 +297,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ]),
+                  const SizedBox(
+                    height: 20,
+                  )
                 ],
               ),
             ),
@@ -302,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           const SizedBox(height: 5),
           Wrap(
-            spacing: 4.0,
+            spacing: 6.0,
             runSpacing: 2.0,
             children: items,
           ),
