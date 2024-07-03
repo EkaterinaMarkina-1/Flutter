@@ -16,11 +16,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 50, 57, 82),
           flexibleSpace: Center(
-            // Используем Center для центрирования
             child: Image.asset(
               'assets/icon/icon.png',
-              fit: BoxFit
-                  .contain, // Используем BoxFit.contain для сохранения пропорций
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -128,7 +126,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return categoryInView;
   }
 
+  bool showCartWidget = false;
+  int quantity = 1;
   Widget _buildItem(String itemName, String imageUrl, String cost) {
+    bool pricebuttonisvisible = true;
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -184,27 +185,97 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
-                    backgroundColor: const Color.fromARGB(255, 254, 178, 157),
-                    textStyle: const TextStyle(color: Colors.white),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     setState(() {
+                //       showCartWidget = true;
+                //     });
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
+                //     backgroundColor: const Color.fromARGB(255, 254, 178, 157),
+                //     textStyle: const TextStyle(color: Colors.white),
+                //   ),
+                //   child: Text(
+                //     cost,
+                //     style: const TextStyle(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.bold,
+                //         color: Colors.white),
+                //   ),
+                // ),
+                // if (showCartWidget) buildCartWidget(cost, quantity),
+                Visibility(
+                  
+                  visible: pricebuttonisvisible,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        pricebuttonisvisible = !pricebuttonisvisible;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 45, vertical: 4),
+                      backgroundColor: const Color.fromARGB(255, 254, 178, 157),
+                      textStyle: const TextStyle(color: Colors.white),
+                    ),
+                    child: Text(
+                      cost,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
-                  child: Text(
-                    cost,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
+                )
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildCartWidget(String cost, int quantity) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              quantity--;
+            });
+          },
+          child: Container(
+            //padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 254, 178, 157),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Text('-'),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text('$quantity'),
+        const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              quantity++;
+            });
+          },
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 254, 178, 157),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Text('+'),
+          ),
+        ),
+      ],
     );
   }
 
