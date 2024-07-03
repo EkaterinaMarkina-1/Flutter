@@ -36,6 +36,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Map<String, int> shoppingcart = {};
+  void addtoshoppingcart(String key) {
+    if (shoppingcart.containsKey(key)) {
+      if (shoppingcart[key] != 10) {
+        setState(() {
+          shoppingcart[key] = (shoppingcart[key] ?? 0) + 1;
+        });
+      }
+    } else {
+      setState(() {
+        shoppingcart[key] = 1;
+      });
+    }
+  }
+
+  void removefromshoppingcart(String key) {
+    setState(() {
+      shoppingcart[key] = (shoppingcart[key] ?? 0) - 1;
+    });
+  }
+
   String currentCategory = "Классический кофе"; // Начальная категория
   final ScrollController _scrollController = ScrollController();
   ScrollController _horizontalScrollController = ScrollController();
@@ -129,7 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showCartWidget = false;
   int quantity = 1;
   Widget _buildItem(String itemName, String imageUrl, String cost) {
-    bool pricebuttonisvisible = true;
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -207,12 +227,50 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ),
                 // if (showCartWidget) buildCartWidget(cost, quantity),
                 Visibility(
-                  
-                  visible: pricebuttonisvisible,
+                  visible: shoppingcart[itemName] == null ||
+                      shoppingcart[itemName] == 0,
+                  replacement: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            removefromshoppingcart(itemName);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 254, 178, 157),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text('-'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(shoppingcart[itemName].toString()),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            addtoshoppingcart(itemName);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 254, 178, 157),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text('+'),
+                        ),
+                      ),
+                    ],
+                  ),
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        pricebuttonisvisible = !pricebuttonisvisible;
+                        addtoshoppingcart(itemName);
                       });
                     },
                     style: ElevatedButton.styleFrom(
