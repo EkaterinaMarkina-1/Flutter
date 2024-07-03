@@ -104,6 +104,84 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Widget _buildItem(String itemName, String imageUrl, String cost) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: 150,
+        height: 210,
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(imageUrl),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+                width: 160,
+                height: 75,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        itemName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ])),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
+                    backgroundColor: const Color.fromRGBO(133, 195, 222, 1),
+                    textStyle: const TextStyle(color: Colors.white),
+                  ),
+                  child: Text(
+                    cost,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildCategoryButton(String category) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -157,13 +235,50 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: SingleChildScrollView(
               controller: _scrollController,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _buildCategorySection("Классический кофе", [
+                    Row(
+                      children: [
+                        _buildItem("Американо", "assets/imeges/1.jpg", "160 ₽"),
+                        _buildItem("Мокачино на альт.молоке",
+                            "assets/imeges/2.jpg", "230 ₽"),
+                      ],
+                    ),
+                  ])
                   // ...
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategorySection(String title, List<Widget> items) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Wrap(
+            spacing: 4.0, // горизонтальный отступ между товарами
+            runSpacing: 2.0, // вертикальный отступ между рядами
+            children: items,
           ),
         ],
       ),
