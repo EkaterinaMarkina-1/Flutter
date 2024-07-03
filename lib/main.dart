@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 45, 51, 73),
+          backgroundColor: const Color.fromARGB(255, 50, 57, 82),
           flexibleSpace: Center(
             // Используем Center для центрирования
             child: Image.asset(
@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
     "Авторский кофе",
     "Сезонное меню напитков",
     "Горячие напитки",
-    "Смузи, фреши и молочные коктейли"
+    "Фреши"
   ];
 
   @override
@@ -66,17 +66,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _selectCategory(String category) {
-  setState(() {
-    currentCategory = category;
-  });
+    setState(() {
+      currentCategory = category;
+    });
 
-  int index = categories.indexOf(category);
-  if (index != -1) {
-    _scrollController.jumpTo(
-      index * 610,
-    );
+    int index = categories.indexOf(category);
+    if (index != -1) {
+      _scrollController.jumpTo(
+        index * 610,
+      );
+    }
   }
-}
 
   int _calculateCategoryIndex(double offset) {
     double maxScroll = _scrollController.position.maxScrollExtent;
@@ -153,33 +153,34 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 115,
-              height: 115,
+              width: 132,
+              height: 142,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
                   image: AssetImage(imageUrl),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 5),
             SizedBox(
                 width: 160,
-                height: 70,
+                height: 60,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         itemName,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 45, 51, 73),
+                          color: Color.fromARGB(255, 50, 57, 82),
                         ),
                       ),
                     ])),
-            const SizedBox(height: 10),
+            //const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -266,16 +267,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   _buildCategorySection("Классический кофе", [
                     Row(
                       children: [
-                        _buildItem("Американо", "assets/imeges/1.jpg", "160 ₽"),
+                        _buildItem("Американо", "assets/imeges/classic_1.jpg",
+                            "160 ₽"),
                         _buildItem("Мокачино на альт.молоке",
-                            "assets/imeges/2.jpg", "230 ₽"),
+                            "assets/imeges/classic_2.jpg", "230 ₽"),
                       ],
                     ),
                     Row(
                       children: [
-                        _buildItem("Капучино", "assets/imeges/3.jpg", "200 ₽"),
-                        _buildItem("Капучино на альт. молоке", "assets/4.jpg",
-                            "260 ₽"),
+                        _buildItem(
+                            "Капучино", "assets/imeges/classic_3.jpg", "200 ₽"),
+                        _buildItem("Капучино на альт. молоке",
+                            "assets/imeges/classic_4.jpg", "260 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem(
+                            "Латте", "assets/imeges/classic_5.jpg", "200 ₽"),
+                        _buildItem("Латте на альт. молоке",
+                            "assets/imeges/classic_6.jpg", "260 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem(
+                            "Мокачино", "assets/imeges/classic_7.jpg", "170 ₽"),
+                        _buildItem(
+                            "Раф", "assets/imeges/classic_8.jpg", "250 ₽"),
                       ],
                     ),
                   ]),
@@ -283,17 +302,109 @@ class _MyHomePageState extends State<MyHomePage> {
                     Row(
                       children: [
                         _buildItem("Вьетнамская классика",
-                            "assets/imeges/5.jpg", "190 ₽"),
+                            "assets/imeges/autor_1.jpg", "190 ₽"),
+                        _buildItem("Кофе Бичерин", "assets/imeges/autor_2.jpg",
+                            "210 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Кофе Бон Бон", "assets/imeges/autor_3.jpg",
+                            "220 ₽"),
+                        _buildItem("Кофе по-генуэзски на латте",
+                            "assets/imeges/autor_4.jpg", "250 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Кофе по-ливийски с куркумой",
+                            "assets/imeges/autor_5.jpg", "220 ₽"),
                         _buildItem(
-                            "Кофе Бичерин", "assets/imeges/6.jpg", "210 ₽"),
+                            "Мачу-Пикчу", "assets/imeges/autor_6.jpg", "190 ₽"),
                       ],
                     ),
                     Row(
                       children: [
                         _buildItem(
-                            "Кофе Бон Бон", "assets/imeges/7.jpg", "220 ₽"),
-                        _buildItem("Кофе по-генуэзски на латте",
-                            "assets/imeges/8.jpg", "250 ₽"),
+                            "Сайгон", "assets/imeges/autor_7.jpg", "250 ₽"),
+                        _buildItem("Сицилийский апельсин на латте",
+                            "assets/imeges/autor_8.jpg", "250 ₽"),
+                      ],
+                    ),
+                  ]),
+                  _buildCategorySection("Сезонное меню напитков", [
+                    Row(
+                      children: [
+                        _buildItem("Взрыв малины", "assets/imeges/season_1.jpg",
+                            "250 ₽"),
+                        _buildItem("Ирландский кофе",
+                            "assets/imeges/season_2.jpg", "190 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Раф цикорий", "assets/imeges/season_3.jpg",
+                            "220 ₽"),
+                        _buildItem("Малина-мята", "assets/imeges/season_4.jpg",
+                            "250 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Раф апельсиновый",
+                            "assets/imeges/season_5.jpg", "220 ₽"),
+                        _buildItem(
+                            "Штрудель", "assets/imeges/season_6.jpg", "280 ₽"),
+                      ],
+                    ),
+                  ]),
+                  _buildCategorySection("Горячие напитки", [
+                    Row(
+                      children: [
+                        _buildItem("Горячий шоколад", "assets/imeges/hot_1.jpg",
+                            "250 ₽"),
+                        _buildItem("Горячий шоколад на альт. молоке",
+                            "assets/imeges/hot_2.jpg", "310 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem(
+                            "Матча латте", "assets/imeges/hot_3.jpg", "230 ₽"),
+                        _buildItem("Матча латте на альт. молоке",
+                            "assets/imeges/hot_4.jpg", "290 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Натуральный какао",
+                            "assets/imeges/hot_5.jpg", "200 ₽"),
+                        _buildItem("Натуральный какао на альт. молоке",
+                            "assets/imeges/hot_6.jpg", "260 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Чай имбирный с лимоном и медом",
+                            "assets/imeges/hot_7.jpg", "220 ₽"),
+                        _buildItem("Чай Клюквенный с можжевел.",
+                            "assets/imeges/hot_8.jpg", "220 ₽"),
+                      ],
+                    ),
+                  ]),
+                  _buildCategorySection("Фреши", [
+                    Row(
+                      children: [
+                        _buildItem("Фреш Апельсиновый",
+                            "assets/imeges/fresh_1.jpg", "320 ₽"),
+                        _buildItem("Фреш Морковный",
+                            "assets/imeges/fresh_2.jpg", "300 ₽"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildItem("Фреш Яблоко", "assets/imeges/fresh_3.jpg",
+                            "300 ₽"),
                       ],
                     ),
                   ]),
