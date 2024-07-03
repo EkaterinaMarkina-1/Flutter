@@ -258,26 +258,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildCategorySection(String title, List<Widget> items) {
+    const EdgeInsets padding =
+        EdgeInsets.symmetric(vertical: 3, horizontal: 4.0);
+    const EdgeInsets textPadding = EdgeInsets.only(left: 8);
+    const TextStyle titleStyle =
+        TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4.0),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ],
+          Padding(
+            padding: textPadding,
+            child: Text(
+              title,
+              style: titleStyle,
+            ),
           ),
           const SizedBox(height: 5),
           Wrap(
-            spacing: 4.0, // горизонтальный отступ между товарами
-            runSpacing: 2.0, // вертикальный отступ между рядами
+            spacing: 4.0, 
+            runSpacing: 2.0, 
             children: items,
           ),
         ],
