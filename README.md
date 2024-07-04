@@ -1,16 +1,21 @@
-# lab_1_menu
+# LAB-1 - Верстка меню
 
-A new Flutter project.
+## Cofe Fest: Мобильное приложение для заказа кофе
 
-## Getting Started
+Описание:
 
-This project is a starting point for a Flutter application.
+Cofe Fest - это мобильное приложение, разработанное для удобного заказа кофе и других напитков. Приложение предлагает широкий выбор классических и авторских кофейных напитков, а также сезонное меню, горячие напитки и фреши.
 
-A few resources to get you started if this is your first Flutter project:
+Основные возможности:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Удобный интерфейс: Интуитивно понятный дизайн, позволяющий легко находить нужные напитки и оформлять заказы.
+- Разнообразие напитков: Богатый выбор классических и авторских кофейных напитков, а также сезонное меню, горячие напитки и фреши.
+- Динамическая корзина: Удобная панель выбора количества товаров для каждого напитка.
+- Прокрутка категорий: Верхняя строка категорий синхронизируется с меню, позволяя легко ориентироваться в списке.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Запись работы приложения:
+
+<video width="320" height="240" controls>
+  <source src="Cofe-Fest.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
