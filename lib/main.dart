@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 50, 57, 82),
+          backgroundColor: const Color.fromARGB(255, 51, 65, 94),
           flexibleSpace: Center(
             child: Image.asset(
               'assets/icon/icon.png',
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  String currentCategory = "Классический кофе"; // Начальная категория
+  String currentCategory = "Классический кофе";
   final ScrollController _scrollController = ScrollController();
   ScrollController _horizontalScrollController = ScrollController();
 
@@ -93,8 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (index != -1) {
       double totalOffset = 0;
       for (int i = 0; i < index; i++) {
-        totalOffset +=
-            _getCategoryHeight(categories[i]); 
+        totalOffset += _getCategoryHeight(categories[i]);
       }
 
       _scrollController.jumpTo(totalOffset);
@@ -104,39 +103,33 @@ class _MyHomePageState extends State<MyHomePage> {
   double _getCategoryHeight(String category) {
     switch (category) {
       case "Классический кофе":
-        return 1000;
+        return 1070;
       case "Авторский кофе":
-        return 1100;
+        return 1070;
       case "Сезонное меню напитков":
-        return 800;
+        return 810;
       case "Горячие напитки":
-        return 900;
+        return 850;
       case "Фреши":
-        return 400;
+        return 200;
       default:
         return 0;
     }
   }
 
-
   void _scrollListener() {
     setState(() {
-         int index = (_scrollController.offset / 900)
-          .floor(); 
+      int index = (_scrollController.offset / 900).floor();
 
-      // Ensure the index is within bounds
       if (index >= 0 && index < categories.length) {
         currentCategory = categories[index];
 
-        // Calculate horizontal scroll position for the category
         double screenWidth = MediaQuery.of(context).size.width;
         double categoryWidth = categories.length * 220.0;
-        double scrollTo = index * 2220.0 - (screenWidth - 220.0) / 2.0;
+        double scrollTo = index * 220.0 - (screenWidth - 220.0) / 2.0;
 
-        // Clamp the horizontal scroll position
         scrollTo = scrollTo.clamp(0, categoryWidth - screenWidth);
 
-        // Update the horizontal scroll controller
         _horizontalScrollController.animateTo(
           scrollTo,
           duration: const Duration(milliseconds: 600),
@@ -204,7 +197,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            // const SizedBox(height: 5),
             SizedBox(
                 width: 160,
                 height: 60,
@@ -217,35 +209,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 50, 57, 82),
+                          color: Color.fromARGB(255, 51, 65, 94),
                         ),
                       ),
                     ])),
-            //const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // ElevatedButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       showCartWidget = true;
-                //     });
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
-                //     backgroundColor: const Color.fromARGB(255, 254, 178, 157),
-                //     textStyle: const TextStyle(color: Colors.white),
-                //   ),
-                //   child: Text(
-                //     cost,
-                //     style: const TextStyle(
-                //         fontSize: 16,
-                //         fontWeight: FontWeight.bold,
-                //         color: Colors.white),
-                //   ),
-                // ),
-                // if (showCartWidget) buildCartWidget(cost, quantity),
                 Visibility(
                   visible: shoppingcart[itemName] == null ||
                       shoppingcart[itemName] == 0,
@@ -345,7 +315,6 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           child: Container(
-            //padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 254, 178, 157),
               borderRadius: BorderRadius.circular(4),
@@ -397,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                 color: currentCategory == category
                     ? Colors.white
-                    : const Color.fromARGB(255, 45, 51, 73),
+                    : const Color.fromARGB(255, 51, 65, 94),
                 fontWeight: FontWeight.bold,
               ),
             ),
