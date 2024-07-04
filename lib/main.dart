@@ -91,39 +91,59 @@ class _MyHomePageState extends State<MyHomePage> {
 
     int index = categories.indexOf(category);
     if (index != -1) {
-      _scrollController.jumpTo(
-        index * 610,
-      );
+      double totalOffset = 0;
+      for (int i = 0; i < index; i++) {
+        totalOffset +=
+            _getCategoryHeight(categories[i]); 
+      }
+
+      _scrollController.jumpTo(totalOffset);
     }
   }
 
-  int _calculateCategoryIndex(double offset) {
-    double maxScroll = _scrollController.position.maxScrollExtent;
-    return maxScroll == 0 ? 0 : (offset / maxScroll).floor();
+  double _getCategoryHeight(String category) {
+    switch (category) {
+      case "Классический кофе":
+        return 1000;
+      case "Авторский кофе":
+        return 1100;
+      case "Сезонное меню напитков":
+        return 800;
+      case "Горячие напитки":
+        return 900;
+      case "Фреши":
+        return 400;
+      default:
+        return 0;
+    }
   }
+
 
   void _scrollListener() {
-    int index = _calculateCategoryIndex(_scrollController.offset);
+    setState(() {
+         int index = (_scrollController.offset / 900)
+          .floor(); 
 
-    if (index >= 0 &&
-        index < categories.length &&
-        currentCategory != categories[index]) {
-      setState(() {
+      // Ensure the index is within bounds
+      if (index >= 0 && index < categories.length) {
         currentCategory = categories[index];
 
-        final screenWidth = MediaQuery.of(context).size.width;
-        final categoryWidth = categories.length * 200;
+        // Calculate horizontal scroll position for the category
+        double screenWidth = MediaQuery.of(context).size.width;
+        double categoryWidth = categories.length * 220.0;
+        double scrollTo = index * 2220.0 - (screenWidth - 220.0) / 2.0;
 
-        double scrollTo = index * 120.0 - (screenWidth - 120.0) / 2.0;
+        // Clamp the horizontal scroll position
         scrollTo = scrollTo.clamp(0, categoryWidth - screenWidth);
 
+        // Update the horizontal scroll controller
         _horizontalScrollController.animateTo(
           scrollTo,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 600),
           curve: Curves.easeInOut,
         );
-      });
-    }
+      }
+    });
   }
 
 // ignore: unused_element
@@ -153,8 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 160,
-        height: 280,
+        width: 164,
+        height: 240,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
@@ -174,8 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 132,
-              height: 142,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
@@ -239,17 +259,28 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         },
                         child: Container(
+                          width: 30,
+                          height: 30,
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 254, 178, 157),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Text('-'),
+                          child: const Text('-',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Text(shoppingcart[itemName].toString()),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 16),
+                      Text(shoppingcart[itemName].toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      const SizedBox(width: 16),
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -257,12 +288,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         },
                         child: Container(
+                          width: 30,
+                          height: 30,
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 254, 178, 157),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Text('+'),
+                          child: const Text('+',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
                         ),
                       ),
                     ],
@@ -395,6 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   _buildCategorySection("Классический кофе", [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Американо", "assets/imeges/classic_1.jpg",
                             "160 ₽"),
@@ -403,6 +442,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem(
                             "Капучино", "assets/imeges/classic_3.jpg", "200 ₽"),
@@ -411,6 +451,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem(
                             "Латте", "assets/imeges/classic_5.jpg", "200 ₽"),
@@ -419,6 +460,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem(
                             "Мокачино", "assets/imeges/classic_7.jpg", "170 ₽"),
@@ -429,6 +471,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                   _buildCategorySection("Авторский кофе", [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Вьетнамская классика",
                             "assets/imeges/autor_1.jpg", "190 ₽"),
@@ -437,6 +480,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Кофе Бон Бон", "assets/imeges/autor_3.jpg",
                             "220 ₽"),
@@ -445,6 +489,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Кофе по-ливийски с куркумой",
                             "assets/imeges/autor_5.jpg", "220 ₽"),
@@ -453,6 +498,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem(
                             "Сайгон", "assets/imeges/autor_7.jpg", "250 ₽"),
@@ -463,6 +509,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                   _buildCategorySection("Сезонное меню напитков", [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Взрыв малины", "assets/imeges/season_1.jpg",
                             "250 ₽"),
@@ -471,6 +518,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Раф цикорий", "assets/imeges/season_3.jpg",
                             "220 ₽"),
@@ -479,6 +527,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Раф апельсиновый",
                             "assets/imeges/season_5.jpg", "220 ₽"),
@@ -489,6 +538,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                   _buildCategorySection("Горячие напитки", [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Горячий шоколад", "assets/imeges/hot_1.jpg",
                             "250 ₽"),
@@ -497,6 +547,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem(
                             "Матча латте", "assets/imeges/hot_3.jpg", "230 ₽"),
@@ -505,6 +556,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Натуральный какао",
                             "assets/imeges/hot_5.jpg", "200 ₽"),
@@ -513,6 +565,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Чай имбирный с лимоном и медом",
                             "assets/imeges/hot_7.jpg", "220 ₽"),
@@ -523,6 +576,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                   _buildCategorySection("Фреши", [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Фреш Апельсиновый",
                             "assets/imeges/fresh_1.jpg", "320 ₽"),
@@ -531,6 +585,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildItem("Фреш Яблоко", "assets/imeges/fresh_3.jpg",
                             "300 ₽"),
