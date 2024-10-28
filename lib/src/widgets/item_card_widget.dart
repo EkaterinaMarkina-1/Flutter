@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart'; 
+import '../constants.dart';
 import 'cart_quantity_widget.dart';
 
 class ItemCardWidget extends StatelessWidget {
@@ -47,11 +47,11 @@ class ItemCardWidget extends StatelessWidget {
 
   BoxDecoration _buildDecoration() {
     return BoxDecoration(
-      color: Colors.white,
+      color: kWhite,
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
+          color: kGrey.withOpacity(0.5),
           spreadRadius: 2,
           blurRadius: 4,
           offset: const Offset(0, 3),
@@ -96,14 +96,14 @@ class ItemCardWidget extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
           backgroundColor: kRedColor,
-          textStyle: const TextStyle(color: Colors.white),
+          textStyle: const TextStyle(color: kWhite),
         ),
         child: Text(
           cost,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: kWhite,
           ),
         ),
       );

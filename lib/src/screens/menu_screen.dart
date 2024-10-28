@@ -171,7 +171,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   child: Container(
                     height: kCategoryHeight,
                     width: 2,
-                    color: Colors.grey,
+                    color: kGrey,
                   ),
                 ),
               ],
