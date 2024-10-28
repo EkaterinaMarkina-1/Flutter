@@ -15,4 +15,4 @@ Cofe Fest - это мобильное приложение, разработан
 
 Запись работы приложения:
 
-![Cofe-Fest-Video](lib/src/assets/video/CofeFest.mp4)
+![Cofe-Fest-Video](lib/src/assets/video/Cofe-Fest.gif)
