@@ -12,7 +12,6 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  // Контроллер вертикального скролла
   Map<String, int> shoppingcart = {};
 
   void addtoshoppingcart(String key) {
@@ -178,12 +177,10 @@ class _MenuScreenState extends State<MenuScreen> {
               ],
             ),
           ),
-          // Список товаров
           Expanded(
             child: ListView(
               controller: _scrollController,
               children: categories.map((category) {
-                // Получаем информацию о текущей категории
                 Map<String, dynamic>? categoryInfo = coffeeInfo[category];
                 if (categoryInfo != null) {
                   return CategorySectionWidget(
@@ -204,7 +201,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     }),
                   );
                 }
-                return const SizedBox(); // Возвращаем пустой виджет, если категория не найдена
+                return const SizedBox();
               }).toList(),
             ),
           )

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart'; // Импорт констант
+import '../constants.dart';
 
 class CategoryButtonWidget extends StatelessWidget {
   final String category;
@@ -7,7 +7,7 @@ class CategoryButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CategoryButtonWidget({
-    super.key, // Изменили здесь
+    super.key, 
     required this.category,
     required this.currentCategory,
     required this.onPressed,

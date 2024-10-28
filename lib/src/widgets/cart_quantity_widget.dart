@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart'; // Импорт констант
+import '../constants.dart'; 
 
 class CartQuantityWidget extends StatelessWidget {
   final String itemName;
@@ -71,4 +71,3 @@ class CartQuantityWidget extends StatelessWidget {
     );
   }
 }
-// Виджет для количества в корзине

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-// Цвета
-// const kPrimaryColor = Color(0xFF6200EE);
 const kSecondaryColor = Color(0xFFF5F5F5);
 const kTextColor = Color(0xFF222222);
 const kTextLightColor = Color(0xFF9A9A9A);
 const kAppBarColor = Color.fromARGB(255, 51, 65, 94);
 const kRedColor = Color.fromARGB(255, 254, 178, 157);
 
-// Размеры
 const double kDefaultPadding = 20.0;
 const double kCategoryCardWidth = 220.0;
 const double kCategoryHeight = 80.0;
@@ -18,12 +15,6 @@ const double kCategoryDrinksHeight = 810.0;
 const double kCategoryHotDrinksHeight = 850.0;
 const double kCategoryFreshHeight = 200.0;
 
-// // Шрифты
-// const TextStyle kCategoryTextStyle = TextStyle(
-//   fontSize: 20,
-//   fontWeight: FontWeight.bold,
-//   color: kTextColor,
-// );
 
 const List<String> categories = [
   "Классический кофе",
