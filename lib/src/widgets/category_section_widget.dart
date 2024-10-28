@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class CategorySectionWidget extends StatelessWidget {
   final String title;
   final List<Widget> items;
@@ -22,7 +21,7 @@ class CategorySectionWidget extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
             padding: textPadding,

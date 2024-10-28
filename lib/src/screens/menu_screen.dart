@@ -192,6 +192,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       String cost = categoryInfo["prices"][itemName];
                       return ItemCardWidget(
                         itemName: itemName,
+                        
                         imageUrl: imageUrl,
                         cost: cost,
                         shoppingcart: shoppingcart,

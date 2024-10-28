@@ -15,7 +15,6 @@ const double kCategoryDrinksHeight = 810.0;
 const double kCategoryHotDrinksHeight = 850.0;
 const double kCategoryFreshHeight = 200.0;
 
-
 const List<String> categories = [
   "Классический кофе",
   "Авторский кофе",
