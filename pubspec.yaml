@@ -23,44 +23,12 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/src/assets/icon/cofefest.png"
+  image_path: "assets/icon/cofefest.png"
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/icon/icon.png
-    - assets/images/classic_1.jpg
-    - assets/images/classic_2.jpg
-    - assets/images/classic_3.jpg
-    - assets/images/classic_4.jpg
-    - assets/images/classic_5.jpg
-    - assets/images/classic_6.jpg
-    - assets/images/classic_7.jpg
-    - assets/images/classic_8.jpg
-    - assets/images/autor_1.jpg
-    - assets/images/autor_2.jpg
-    - assets/images/autor_3.jpg
-    - assets/images/autor_4.jpg
-    - assets/images/autor_5.jpg
-    - assets/images/autor_6.jpg
-    - assets/images/autor_7.jpg
-    - assets/images/autor_8.jpg
-    - assets/images/season_1.jpg
-    - assets/images/season_2.jpg
-    - assets/images/season_3.jpg
-    - assets/images/season_4.jpg
-    - assets/images/season_5.jpg
-    - assets/images/season_6.jpg
-    - assets/images/hot_1.jpg
-    - assets/images/hot_2.jpg
-    - assets/images/hot_3.jpg
-    - assets/images/hot_4.jpg
-    - assets/images/hot_5.jpg
-    - assets/images/hot_6.jpg
-    - assets/images/hot_7.jpg
-    - assets/images/hot_8.jpg
-    - assets/images/fresh_1.jpg
-    - assets/images/fresh_2.jpg
-    - assets/images/fresh_3.jpg
-    - assets/video/Cofe-Fest.gif
+    - assets/icon/
+    - assets/images/
+    - assets/video/
