@@ -32,6 +32,8 @@ class CategorySectionWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Wrap(
+            alignment: WrapAlignment.center,
+            /*   crossAxisAlignment: WrapCrossAlignment.center,*/
             spacing: 6.0,
             runSpacing: 2.0,
             children: items,
