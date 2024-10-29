@@ -5,7 +5,7 @@ const kTextColor = Color(0xFF222222);
 const kTextLightColor = Color(0xFF9A9A9A);
 const kGrey = Colors.grey;
 const kWhite = Colors.white;
-const kAppBarColor = Color.fromARGB(255, 51, 65, 94);
+const kAppBarColor = Color.fromARGB(255, 53, 65, 92);
 const kRedColor = Color.fromARGB(255, 254, 178, 157);
 
 const double kDefaultPadding = 20.0;

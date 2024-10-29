@@ -137,7 +137,7 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kAppBarColor,
+        backgroundColor: kAppBarColor2,
         flexibleSpace: Center(
           child: Image.asset(
             'assets/icon/icon.png',
@@ -192,7 +192,6 @@ class _MenuScreenState extends State<MenuScreen> {
                       String cost = categoryInfo["prices"][itemName];
                       return ItemCardWidget(
                         itemName: itemName,
-                        
                         imageUrl: imageUrl,
                         cost: cost,
                         shoppingcart: shoppingcart,
