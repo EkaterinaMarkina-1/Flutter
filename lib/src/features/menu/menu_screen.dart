@@ -137,7 +137,7 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kAppBarColor2,
+        backgroundColor: kAppBarColor,
         flexibleSpace: Center(
           child: Image.asset(
             'assets/icon/icon.png',
