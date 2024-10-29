@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/menu_screen.dart';
+import 'features/menu/menu_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
