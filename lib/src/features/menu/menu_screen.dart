@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lab_1_menu/src/constants.dart';
-import 'package:lab_1_menu/src/widgets/category_button_widget.dart';
-import 'package:lab_1_menu/src/widgets/category_section_widget.dart';
-import 'package:lab_1_menu/src/widgets/item_card_widget.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/category_button_widget.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/category_section_widget.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/item_card_widget.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
