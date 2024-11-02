@@ -15,25 +15,25 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  Map<String, int> shoppingcart = {};
+  Map<String, int> shoppingCart = {};
 
   void addtoshoppingcart(String key) {
-    if (shoppingcart.containsKey(key)) {
-      if (shoppingcart[key] != 10) {
+    if (shoppingCart.containsKey(key)) {
+      if (shoppingCart[key] != 10) {
         setState(() {
-          shoppingcart[key] = (shoppingcart[key] ?? 0) + 1;
+          shoppingCart[key] = (shoppingCart[key] ?? 0) + 1;
         });
       }
     } else {
       setState(() {
-        shoppingcart[key] = 1;
+        shoppingCart[key] = 1;
       });
     }
   }
 
   void removefromshoppingcart(String key) {
     setState(() {
-      shoppingcart[key] = (shoppingcart[key] ?? 0) - 1;
+      shoppingCart[key] = (shoppingCart[key] ?? 0) - 1;
     });
   }
 
@@ -194,7 +194,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         itemName: itemName,
                         imageUrl: imageUrl,
                         cost: cost,
-                        shoppingcart: shoppingcart,
+                        shoppingcart: shoppingCart,
                         addtoshoppingcart: addtoshoppingcart,
                         removefromshoppingcart: removefromshoppingcart,
                       );
