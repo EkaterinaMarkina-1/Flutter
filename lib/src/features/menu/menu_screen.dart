@@ -16,9 +16,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Map<String, int> shoppingCart = {};
-// Ключ для корзинного виджета
   final GlobalKey<_MenuScreenState> cartKey = GlobalKey<_MenuScreenState>();
-  // Словарь для хранения ключей категорий
   final Map<String, GlobalKey> categoryKeys = {};
 
   void addtoshoppingcart(String key) {
@@ -48,7 +46,6 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
-    // Инициализируем ключи для каждой категории
     for (String category in AppStrings.categories) {
       categoryKeys[category] = GlobalKey();
     }
@@ -63,12 +60,10 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
-// Метод для выбора категории
   void _selectCategory(String category) {
     setState(() {
       currentCategory = category;
     });
-    // Прокручиваем категорию в видимую область
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Scrollable.ensureVisible(
         categoryKeys[category]!.currentContext!,
@@ -78,15 +73,12 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
-  // Метод для обработки скроллинга и отображения корзины
   void _scrollListener() {
     if (_scrollController.position.pixels > 200 && !showCartWidget) {
       setState(() {
         showCartWidget = true;
       });
-      // Прокручиваем корзину в видимую область
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Используем метод ensureVisible() для прокрутки корзины в видимую область
         Scrollable.ensureVisible(
           cartKey.currentContext!,
           duration: const Duration(milliseconds: 300),
@@ -176,7 +168,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       CoffeeData.coffeeInfo[category];
                   if (categoryInfo != null) {
                     return CategorySectionWidget(
-                      key: categoryKeys[category], // Добавляем ключ
+                      key: categoryKeys[category],
                       title: category,
                       items: List.generate(categoryInfo["products"].length,
                           (index) {
