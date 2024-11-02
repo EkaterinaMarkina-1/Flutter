@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:lab_1_menu/src/theme/app_dimensions.dart';
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'cart_quantity_widget.dart';
 
@@ -52,7 +51,7 @@ class ItemCardWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: AppColors.kGrey.withOpacity(0.5),
+          color: AppColors.kTextLightColor.withOpacity(0.5),
           spreadRadius: 2,
           blurRadius: 4,
           offset: const Offset(0, 3),

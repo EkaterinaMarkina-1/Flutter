@@ -153,7 +153,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   child: Container(
                     height: AppDimensions.kCategoryCardWidth,
                     width: 2,
-                    color: AppColors.kGrey,
+                    color: AppColors.kTextLightColor,
                   ),
                 ),
               ],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:lab_1_menu/src/theme/app_dimensions.dart';
-// import 'package:lab_1_menu/src/theme/app_colors.dart';
 
 class CategorySectionWidget extends StatelessWidget {
   final String title;

@@ -24,7 +24,7 @@ class CategoryButtonWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: currentCategory == category
                 ? AppColors.kRedColor
-                : AppColors.kGrey,
+                : AppColors.kTextLightColor,
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.all(8.0),
