@@ -16,6 +16,10 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Map<String, int> shoppingCart = {};
+// Ключ для корзинного виджета
+  final GlobalKey<_MenuScreenState> cartKey = GlobalKey<_MenuScreenState>();
+  // Словарь для хранения ключей категорий
+  final Map<String, GlobalKey> categoryKeys = {};
 
   void addtoshoppingcart(String key) {
     if (shoppingCart.containsKey(key)) {
@@ -44,6 +48,10 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    // Инициализируем ключи для каждой категории
+    for (String category in AppStrings.categories) {
+      categoryKeys[category] = GlobalKey();
+    }
     _scrollController.addListener(_scrollListener);
   }
 
@@ -55,56 +63,41 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
+// Метод для выбора категории
   void _selectCategory(String category) {
     setState(() {
       currentCategory = category;
     });
-
-    int index = AppStrings.categories.indexOf(category);
-    if (index != -1) {
-      double totalOffset = 0;
-      for (int i = 0; i < index; i++) {
-        totalOffset += _getCategoryHeight(AppStrings.categories[i]);
-      }
-
-      _scrollController.jumpTo(totalOffset);
-    }
+    // Прокручиваем категорию в видимую область
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Scrollable.ensureVisible(
+        categoryKeys[category]!.currentContext!,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
-  double _getCategoryHeight(String category) {
-    return switch (category) {
-      "Классический кофе" => AppDimensions.kCategoryCoffeeHeight,
-      "Авторский кофе" => AppDimensions.kCategoryCoffeeHeight,
-      "Сезонное меню напитков" => AppDimensions.kCategoryDrinksHeight,
-      "Горячие напитки" => AppDimensions.kCategoryHotDrinksHeight,
-      "Фреши" => AppDimensions.kCategoryFreshHeight,
-      _ => 0,
-    };
-  }
-
+  // Метод для обработки скроллинга и отображения корзины
   void _scrollListener() {
-    setState(() {
-      int index =
-          (_scrollController.offset / AppDimensions.kCategoryHeight2).floor();
-
-      if (index >= 0 && index < AppStrings.categories.length) {
-        currentCategory = AppStrings.categories[index];
-
-        double screenWidth = MediaQuery.of(context).size.width;
-        double categoryWidth =
-            AppStrings.categories.length * AppDimensions.kCategoryCardWidth;
-        double scrollTo = index * AppDimensions.kCategoryCardWidth -
-            (screenWidth - AppDimensions.kCategoryCardWidth) / 2.0;
-
-        scrollTo = scrollTo.clamp(0, categoryWidth - screenWidth);
-
-        _horizontalScrollController.animateTo(
-          scrollTo,
-          duration: const Duration(milliseconds: 600),
+    if (_scrollController.position.pixels > 200 && !showCartWidget) {
+      setState(() {
+        showCartWidget = true;
+      });
+      // Прокручиваем корзину в видимую область
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Используем метод ensureVisible() для прокрутки корзины в видимую область
+        Scrollable.ensureVisible(
+          cartKey.currentContext!,
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
-      }
-    });
+      });
+    } else if (_scrollController.position.pixels < 200 && showCartWidget) {
+      setState(() {
+        showCartWidget = false;
+      });
+    }
   }
 
   // ignore: unused_element
@@ -124,7 +117,6 @@ class _MenuScreenState extends State<MenuScreen> {
     }
 
     categoryInView = AppStrings.categories[position.toInt()];
-
     return categoryInView;
   }
 
@@ -176,34 +168,37 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
           ),
           Expanded(
-            child: ListView(
+            child: SingleChildScrollView(
               controller: _scrollController,
-              children: AppStrings.categories.map((category) {
-                Map<String, dynamic>? categoryInfo =
-                    CoffeeData.coffeeInfo[category];
-                if (categoryInfo != null) {
-                  return CategorySectionWidget(
-                    title: category,
-                    items:
-                        List.generate(categoryInfo["products"].length, (index) {
-                      String itemName = categoryInfo["products"][index];
-                      String imageUrl = categoryInfo["images"][index];
-                      String cost = categoryInfo["prices"][itemName];
-                      return ItemCardWidget(
-                        itemName: itemName,
-                        imageUrl: imageUrl,
-                        cost: cost,
-                        shoppingcart: shoppingCart,
-                        addtoshoppingcart: addtoshoppingcart,
-                        removefromshoppingcart: removefromshoppingcart,
-                      );
-                    }),
-                  );
-                }
-                return const SizedBox();
-              }).toList(),
+              child: Column(
+                children: AppStrings.categories.map((category) {
+                  Map<String, dynamic>? categoryInfo =
+                      CoffeeData.coffeeInfo[category];
+                  if (categoryInfo != null) {
+                    return CategorySectionWidget(
+                      key: categoryKeys[category], // Добавляем ключ
+                      title: category,
+                      items: List.generate(categoryInfo["products"].length,
+                          (index) {
+                        String itemName = categoryInfo["products"][index];
+                        String imageUrl = categoryInfo["images"][index];
+                        String cost = categoryInfo["prices"][itemName];
+                        return ItemCardWidget(
+                          itemName: itemName,
+                          imageUrl: imageUrl,
+                          cost: cost,
+                          shoppingcart: shoppingCart,
+                          addtoshoppingcart: addtoshoppingcart,
+                          removefromshoppingcart: removefromshoppingcart,
+                        );
+                      }),
+                    );
+                  }
+                  return const SizedBox();
+                }).toList(),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
