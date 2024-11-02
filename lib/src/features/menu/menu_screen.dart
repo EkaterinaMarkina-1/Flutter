@@ -39,13 +39,12 @@ class _MenuScreenState extends State<MenuScreen> {
 
   String currentCategory = "Классический кофе";
   final ScrollController _scrollController = ScrollController();
-  ScrollController _horizontalScrollController = ScrollController();
+  final ScrollController _horizontalScrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    _horizontalScrollController = ScrollController();
   }
 
   @override
