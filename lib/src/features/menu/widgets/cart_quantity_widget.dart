@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/quantity_button.dart';
 
 class CartQuantityWidget extends StatelessWidget {
   final String itemName;
@@ -20,52 +20,26 @@ class CartQuantityWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: () {
+        QuantityButton(
+          label: '-',
+          onPressed: () {
             removefromshoppingcart(itemName);
           },
-          child: Container(
-            width: 30,
-            height: 30,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: kRedColor,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text('-',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                )),
+        ),
+        const SizedBox(width: 16),
+        Text(
+          shoppingcart[itemName].toString(),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(width: 16),
-        Text(shoppingcart[itemName].toString(),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-        const SizedBox(width: 16),
-        GestureDetector(
-          onTap: () {
+        QuantityButton(
+          label: '+',
+          onPressed: () {
             addtoshoppingcart(itemName);
           },
-          child: Container(
-            width: 30,
-            height: 30,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: kRedColor,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text('+',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                )),
-          ),
         ),
       ],
     );

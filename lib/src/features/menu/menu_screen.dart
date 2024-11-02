@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lab_1_menu/src/constants.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/category_button_widget.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/category_section_widget.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/item_card_widget.dart';
+import 'package:lab_1_menu/src/features/menu/data/app_categories.dart';
+import 'package:lab_1_menu/src/theme/app_dimensions.dart';
+import 'package:lab_1_menu/src/theme/app_colors.dart';
+import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -58,11 +61,11 @@ class _MenuScreenState extends State<MenuScreen> {
       currentCategory = category;
     });
 
-    int index = categories.indexOf(category);
+    int index = AppStrings.categories.indexOf(category);
     if (index != -1) {
       double totalOffset = 0;
       for (int i = 0; i < index; i++) {
-        totalOffset += _getCategoryHeight(categories[i]);
+        totalOffset += _getCategoryHeight(AppStrings.categories[i]);
       }
 
       _scrollController.jumpTo(totalOffset);
@@ -70,33 +73,29 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   double _getCategoryHeight(String category) {
-    switch (category) {
-      case "Классический кофе":
-        return kCategoryCoffeeHeight;
-      case "Авторский кофе":
-        return kCategoryCoffeeHeight;
-      case "Сезонное меню напитков":
-        return kCategoryDrinksHeight;
-      case "Горячие напитки":
-        return kCategoryHotDrinksHeight;
-      case "Фреши":
-        return kCategoryFreshHeight;
-      default:
-        return 0;
-    }
+    return switch (category) {
+      "Классический кофе" => AppDimensions.kCategoryCoffeeHeight,
+      "Авторский кофе" => AppDimensions.kCategoryCoffeeHeight,
+      "Сезонное меню напитков" => AppDimensions.kCategoryDrinksHeight,
+      "Горячие напитки" => AppDimensions.kCategoryHotDrinksHeight,
+      "Фреши" => AppDimensions.kCategoryFreshHeight,
+      _ => 0,
+    };
   }
 
   void _scrollListener() {
     setState(() {
-      int index = (_scrollController.offset / kCategoryHeight2).floor();
+      int index =
+          (_scrollController.offset / AppDimensions.kCategoryHeight2).floor();
 
-      if (index >= 0 && index < categories.length) {
-        currentCategory = categories[index];
+      if (index >= 0 && index < AppStrings.categories.length) {
+        currentCategory = AppStrings.categories[index];
 
         double screenWidth = MediaQuery.of(context).size.width;
-        double categoryWidth = categories.length * kCategoryCardWidth;
-        double scrollTo = index * kCategoryCardWidth -
-            (screenWidth - kCategoryCardWidth) / 2.0;
+        double categoryWidth =
+            AppStrings.categories.length * AppDimensions.kCategoryCardWidth;
+        double scrollTo = index * AppDimensions.kCategoryCardWidth -
+            (screenWidth - AppDimensions.kCategoryCardWidth) / 2.0;
 
         scrollTo = scrollTo.clamp(0, categoryWidth - screenWidth);
 
@@ -114,7 +113,7 @@ class _MenuScreenState extends State<MenuScreen> {
     double position = 0.0;
     String categoryInView;
 
-    for (int i = 0; i < categories.length; i++) {
+    for (int i = 0; i < AppStrings.categories.length; i++) {
       RenderBox renderBox = context.findRenderObject() as RenderBox;
       double itemPosition = renderBox.localToGlobal(Offset.zero).dy;
 
@@ -125,7 +124,7 @@ class _MenuScreenState extends State<MenuScreen> {
       }
     }
 
-    categoryInView = categories[position.toInt()];
+    categoryInView = AppStrings.categories[position.toInt()];
 
     return categoryInView;
   }
@@ -137,7 +136,7 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kAppBarColor,
+        backgroundColor: AppColors.kAppBarColor,
         flexibleSpace: Center(
           child: Image.asset(
             'assets/icon/icon.png',
@@ -148,14 +147,14 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Column(
         children: [
           SizedBox(
-            height: kCategoryHeight,
+            height: AppDimensions.kCategoryHeight,
             child: Stack(
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   controller: _horizontalScrollController,
                   child: Row(
-                    children: categories.map((category) {
+                    children: AppStrings.categories.map((category) {
                       return CategoryButtonWidget(
                         category: category,
                         currentCategory: currentCategory,
@@ -169,9 +168,9 @@ class _MenuScreenState extends State<MenuScreen> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                    height: kCategoryHeight,
+                    height: AppDimensions.kCategoryCardWidth,
                     width: 2,
-                    color: kGrey,
+                    color: AppColors.kGrey,
                   ),
                 ),
               ],
@@ -180,8 +179,9 @@ class _MenuScreenState extends State<MenuScreen> {
           Expanded(
             child: ListView(
               controller: _scrollController,
-              children: categories.map((category) {
-                Map<String, dynamic>? categoryInfo = coffeeInfo[category];
+              children: AppStrings.categories.map((category) {
+                Map<String, dynamic>? categoryInfo =
+                    CoffeeData.coffeeInfo[category];
                 if (categoryInfo != null) {
                   return CategorySectionWidget(
                     title: category,

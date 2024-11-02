@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../constants.dart';
+// import 'package:lab_1_menu/src/theme/app_dimensions.dart';
+import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'cart_quantity_widget.dart';
 
 class ItemCardWidget extends StatelessWidget {
@@ -47,11 +48,11 @@ class ItemCardWidget extends StatelessWidget {
 
   BoxDecoration _buildDecoration() {
     return BoxDecoration(
-      color: kWhite,
+      color: AppColors.kWhite,
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: kGrey.withOpacity(0.5),
+          color: AppColors.kGrey.withOpacity(0.5),
           spreadRadius: 2,
           blurRadius: 4,
           offset: const Offset(0, 3),
@@ -85,7 +86,7 @@ class ItemCardWidget extends StatelessWidget {
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: kTextColor,
+          color: AppColors.kTextColor,
         ),
       ),
     );
@@ -97,15 +98,15 @@ class ItemCardWidget extends StatelessWidget {
         onPressed: () => addtoshoppingcart(itemName),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
-          backgroundColor: kRedColor,
-          textStyle: const TextStyle(color: kWhite),
+          backgroundColor: AppColors.kRedColor,
+          textStyle: const TextStyle(color: AppColors.kWhite),
         ),
         child: Text(
           cost,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: kWhite,
+            color: AppColors.kWhite,
           ),
         ),
       );

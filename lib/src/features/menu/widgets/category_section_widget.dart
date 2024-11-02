@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:lab_1_menu/src/theme/app_dimensions.dart';
+// import 'package:lab_1_menu/src/theme/app_colors.dart';
 
 class CategorySectionWidget extends StatelessWidget {
   final String title;
@@ -33,7 +35,6 @@ class CategorySectionWidget extends StatelessWidget {
           const SizedBox(height: 5),
           Wrap(
             alignment: WrapAlignment.center,
-            /*   crossAxisAlignment: WrapCrossAlignment.center,*/
             spacing: 6.0,
             runSpacing: 2.0,
             children: items,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants.dart';
+import 'package:lab_1_menu/src/theme/app_colors.dart';
 
 class CategoryButtonWidget extends StatelessWidget {
   final String category;
@@ -7,7 +7,7 @@ class CategoryButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CategoryButtonWidget({
-    super.key, 
+    super.key,
     required this.category,
     required this.currentCategory,
     required this.onPressed,
@@ -22,7 +22,9 @@ class CategoryButtonWidget extends StatelessWidget {
         child: Container(
           height: 36,
           decoration: BoxDecoration(
-            color: currentCategory == category ? kRedColor : Colors.grey[300],
+            color: currentCategory == category
+                ? AppColors.kRedColor
+                : AppColors.kGrey,
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.all(8.0),
@@ -30,7 +32,9 @@ class CategoryButtonWidget extends StatelessWidget {
             child: Text(
               category,
               style: TextStyle(
-                color: currentCategory == category ? Colors.white : kTextColor,
+                color: currentCategory == category
+                    ? AppColors.kWhite
+                    : AppColors.kTextColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
