@@ -73,6 +73,8 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
+  bool showCartWidget = false;
+
   void _scrollListener() {
     if (_scrollController.position.pixels > 200 && !showCartWidget) {
       setState(() {
@@ -92,28 +94,39 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  // ignore: unused_element
-  String _determineCategoryInView() {
-    double position = 0.0;
-    String categoryInView;
+  void _checkCategoryVisibility() {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    final double visibleTopEdge = offset.dy;
+    final double visibleBottomEdge = offset.dy + renderBox.size.height;
 
-    for (int i = 0; i < AppStrings.categories.length; i++) {
-      RenderBox renderBox = context.findRenderObject() as RenderBox;
-      double itemPosition = renderBox.localToGlobal(Offset.zero).dy;
+    for (String category in AppStrings.categories) {
+      final categoryKey = categoryKeys[category];
+      final categoryRenderBox =
+          categoryKey!.currentContext?.findRenderObject() as RenderBox?;
 
-      if (itemPosition >= 0 &&
-          itemPosition < MediaQuery.of(context).size.height) {
-        position = i.toDouble();
-        break;
+      if (categoryRenderBox != null) {
+        final categoryOffset = categoryRenderBox.localToGlobal(Offset.zero);
+        final categoryHeight = categoryRenderBox.size.height;
+        if (categoryOffset.dy >= visibleTopEdge &&
+            categoryOffset.dy <= visibleBottomEdge) {
+          if (categoryHeight < renderBox.size.height) {
+            if (categoryOffset.dy + categoryHeight <= visibleBottomEdge) {
+              setState(() {
+                currentCategory = category;
+              });
+              break;
+            }
+          } else {
+            setState(() {
+              currentCategory = category;
+            });
+            break;
+          }
+        }
       }
     }
-
-    categoryInView = AppStrings.categories[position.toInt()];
-    return categoryInView;
   }
-
-  bool showCartWidget = false;
-  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +152,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   child: Row(
                     children: AppStrings.categories.map((category) {
                       return CategoryButtonWidget(
+                        key: categoryKeys[category],
                         category: category,
                         currentCategory: currentCategory,
                         onPressed: () {
@@ -160,34 +174,42 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: AppStrings.categories.map((category) {
-                  Map<String, dynamic>? categoryInfo =
-                      CoffeeData.coffeeInfo[category];
-                  if (categoryInfo != null) {
-                    return CategorySectionWidget(
-                      key: categoryKeys[category],
-                      title: category,
-                      items: List.generate(categoryInfo["products"].length,
-                          (index) {
-                        String itemName = categoryInfo["products"][index];
-                        String imageUrl = categoryInfo["images"][index];
-                        String cost = categoryInfo["prices"][itemName];
-                        return ItemCardWidget(
-                          itemName: itemName,
-                          imageUrl: imageUrl,
-                          cost: cost,
-                          shoppingcart: shoppingCart,
-                          addtoshoppingcart: addtoshoppingcart,
-                          removefromshoppingcart: removefromshoppingcart,
-                        );
-                      }),
-                    );
-                  }
-                  return const SizedBox();
-                }).toList(),
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification notification) {
+                if (notification is ScrollUpdateNotification) {
+                  _checkCategoryVisibility();
+                }
+                return true;
+              },
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  children: AppStrings.categories.map((category) {
+                    Map<String, dynamic>? categoryInfo =
+                        CoffeeData.coffeeInfo[category];
+                    if (categoryInfo != null) {
+                      return CategorySectionWidget(
+                        key: categoryKeys[category],
+                        title: category,
+                        items: List.generate(categoryInfo["products"].length,
+                            (index) {
+                          String itemName = categoryInfo["products"][index];
+                          String imageUrl = categoryInfo["images"][index];
+                          String cost = categoryInfo["prices"][itemName];
+                          return ItemCardWidget(
+                            itemName: itemName,
+                            imageUrl: imageUrl,
+                            cost: cost,
+                            shoppingcart: shoppingCart,
+                            addtoshoppingcart: addtoshoppingcart,
+                            removefromshoppingcart: removefromshoppingcart,
+                          );
+                        }),
+                      );
+                    }
+                    return const SizedBox();
+                  }).toList(),
+                ),
               ),
             ),
           ),
