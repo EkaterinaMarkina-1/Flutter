@@ -6,6 +6,12 @@ import 'package:lab_1_menu/src/features/menu/data/app_categories.dart';
 import 'package:lab_1_menu/src/theme/app_dimensions.dart';
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_botton.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_event.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_state.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_bottom_sheet.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -18,6 +24,7 @@ class _MenuScreenState extends State<MenuScreen> {
   final Map<String, int> shoppingCart = {};
   final Map<String, GlobalKey> categoryButtonKeys = {};
   final Map<String, GlobalKey> categorySectionKeys = {};
+  Map<String, int> cart = {};
 
   void addToShoppingCart(String key) {
     if (shoppingCart.containsKey(key)) {
@@ -107,67 +114,91 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  void showCartBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const CartBottomSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.kAppBarColor,
-        flexibleSpace: Center(
-          child: Image.asset(
-            'assets/icon/icon.png',
-            fit: BoxFit.contain,
+    return BlocProvider(
+      create: (context) => CartBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.kAppBarColor,
+          flexibleSpace: Center(
+            child: Image.asset(
+              'assets/icon/icon.png',
+              fit: BoxFit.contain,
+            ),
           ),
+          actions: const [CartButton()],
         ),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: AppDimensions.kCategoryHeight,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              controller: _horizontalScrollController,
-              child: Row(
-                children: AppStrings.categories.map((category) {
-                  return CategoryButtonWidget(
-                    key: categoryButtonKeys[category],
-                    category: category,
-                    currentCategory: currentCategory,
-                    onPressed: () => _selectCategory(category),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: AppStrings.categories.map((category) {
-                  final categoryInfo = CoffeeData.coffeeInfo[category];
-                  if (categoryInfo != null) {
-                    return CategorySectionWidget(
-                      key: categorySectionKeys[category],
-                      title: category,
-                      items: List.generate(categoryInfo["products"].length,
-                          (index) {
-                        final itemName = categoryInfo["products"][index];
-                        return ItemCardWidget(
-                          itemName: itemName,
-                          imageUrl: categoryInfo["images"][index],
-                          cost: categoryInfo["prices"][itemName],
-                          shoppingcart: shoppingCart,
-                          addtoshoppingcart: addToShoppingCart,
-                          removefromshoppingcart: removeFromShoppingCart,
+        body: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: AppDimensions.kCategoryHeight,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _horizontalScrollController,
+                    child: Row(
+                      children: AppStrings.categories.map((category) {
+                        return CategoryButtonWidget(
+                          key: categoryButtonKeys[category],
+                          category: category,
+                          currentCategory: currentCategory,
+                          onPressed: () => _selectCategory(category),
                         );
-                      }),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: AppStrings.categories.map((category) {
+                        final categoryInfo = CoffeeData.coffeeInfo[category];
+                        if (categoryInfo != null) {
+                          return CategorySectionWidget(
+                            key: categorySectionKeys[category],
+                            title: category,
+                            items: List.generate(
+                                categoryInfo["products"].length, (index) {
+                              final itemName = categoryInfo["products"][index];
+                              return ItemCardWidget(
+                                  itemName: itemName,
+                                  imageUrl: categoryInfo["images"][index],
+                                  cost: categoryInfo["prices"][itemName],
+                                  shoppingcart: shoppingCart,
+                                  addtoshoppingcart: (key) {
+                                    context
+                                        .read<CartBloc>()
+                                        .add(AddToCartEvent(key));
+                                  },
+                                  removefromshoppingcart: (key) {
+                                    context
+                                        .read<CartBloc>()
+                                        .add(RemoveFromCartEvent(key));
+                                  });
+                            }),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
