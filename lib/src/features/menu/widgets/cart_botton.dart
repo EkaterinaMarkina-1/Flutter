@@ -14,7 +14,7 @@ class CartButton extends StatelessWidget {
       builder: (context, state) {
         final isCartEmpty = state.cart.isEmpty;
 
-        // Если корзина пустая, полностью скрываем кнопку
+        // Если корзина пустая, скрываем кнопку
         if (isCartEmpty) return const SizedBox.shrink();
 
         // Иначе отображаем кнопку корзины
@@ -44,36 +44,17 @@ class CartButton extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(12),
-            child: Stack(
-              alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.shopping_cart_outlined,
-                  size: 28,
-                  color: Colors.white,
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    height: 18,
-                    width: 18,
-                    decoration: BoxDecoration(
-                      color: AppColors.kRedColor,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        state.cart.values.reduce((a, b) => a + b).toString(),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                // Отображение общей стоимости корзины
+                Text(
+                  '${state.totalCost.toString()} руб.', // Форматируем стоимость с 2 знаками после запятой
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ],

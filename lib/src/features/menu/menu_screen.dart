@@ -175,18 +175,22 @@ class _MenuScreenState extends State<MenuScreen> {
                               return ItemCardWidget(
                                   itemName: itemName,
                                   imageUrl: categoryInfo["images"][index],
-                                  cost: categoryInfo["prices"][itemName],
+                                  cost: '${categoryInfo["prices"][itemName]} ₽',
                                   shoppingcart: shoppingCart,
                                   addtoshoppingcart: (key) {
+                                    final price = double.tryParse(
+                                            categoryInfo["prices"][key]
+                                                .toString()) ??
+                                        0.0;
                                     context
                                         .read<CartBloc>()
-                                        .add(AddToCartEvent(key));
+                                        .add(AddToCartEvent(key, price));
                                     addToShoppingCart(key);
                                   },
                                   removefromshoppingcart: (key) {
-                                    context
-                                        .read<CartBloc>()
-                                        .add(RemoveFromCartEvent(key));
+                                    context.read<CartBloc>().add(
+                                        RemoveFromCartEvent(
+                                            key)); // Удаление не требует price
                                     removeFromShoppingCart(key);
                                   });
                             }),

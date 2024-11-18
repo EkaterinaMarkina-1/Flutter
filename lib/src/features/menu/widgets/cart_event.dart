@@ -8,11 +8,12 @@ abstract class CartEvent extends Equatable {
 // Событие для добавления товара в корзину
 class AddToCartEvent extends CartEvent {
   final String key;
+  final double price; // Добавляем цену
 
-  AddToCartEvent(this.key);
+  AddToCartEvent(this.key, this.price);
 
   @override
-  List<Object> get props => [key];
+  List<Object> get props => [key, price];
 }
 
 // Событие для удаления товара из корзины
@@ -26,16 +27,7 @@ class RemoveFromCartEvent extends CartEvent {
 }
 
 // Событие для очистки корзины
-class ClearCartEvent extends CartEvent {
-  @override
-  List<Object> get props => [];
-}
+class ClearCartEvent extends CartEvent {}
 
-// Событие для оформления заказа.
-class PlaceOrderEvent extends CartEvent {
-  @override
-  List<Object> get props => [];
-}
-
-// События (CartEvent) описывают действия,
-// которые могут быть выполнены в отношении корзины.
+// Событие для оформления заказа
+class PlaceOrderEvent extends CartEvent {}

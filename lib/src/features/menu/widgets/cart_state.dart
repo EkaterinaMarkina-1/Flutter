@@ -1,38 +1,51 @@
 import 'package:equatable/equatable.dart';
 
+// Класс для представления товара в корзине, включая цену
+class CartItem extends Equatable {
+  final String id; // ID товара
+  final int quantity; // Количество
+  final double price; // Цена товара
+
+  const CartItem(
+      {required this.id, required this.quantity, required this.price});
+
+  @override
+  List<Object?> get props => [id, quantity, price];
+}
+
 abstract class CartState extends Equatable {
-  final Map<String, int> cart;
+  final Map<String, CartItem> cart;
 
   const CartState({required this.cart});
+
+  // Метод для вычисления общей стоимости с использованием reduce
+  double get totalCost {
+    // Применяем reduce для вычисления общей стоимости
+    return cart.values
+        .map((item) =>
+            item.price *
+            item.quantity) // Вычисляем стоимость для каждого товара
+        .reduce((a, b) => a + b); // Суммируем все стоимости
+  }
 
   @override
   List<Object> get props => [cart];
 }
 
-// Класс CartInitial представляет начальное состояние корзины.
-// В конструкторе вызывается конструктор родительского класса super(cart: {}),
-// передавая пустую карту {} (означает, что корзина изначально пуста).
 class CartInitial extends CartState {
   CartInitial() : super(cart: {});
 }
 
-// Этот класс используется, когда корзина обновляется
-// (например, добавляется новый товар или изменяется количество).
 class CartUpdated extends CartState {
-  const CartUpdated(Map<String, int> cart) : super(cart: cart);
+  const CartUpdated(Map<String, CartItem> cart) : super(cart: cart);
 }
 
-// При создании состояния OrderPlaced мы передаем в корзину пустую карту {},
-// так как после оформления заказа корзина должна быть очищена
 class OrderPlaced extends CartState {
-  const OrderPlaced() : super(cart: const {}); // Передаем пустую карту
+  const OrderPlaced() : super(cart: const {}); // Now valid
 }
 
-// состояние, когда заказ не удалось оформить
-// (корзина очищена, сообщение об ошибке).
 class OrderFailed extends CartState {
   final String errorMessage;
 
-  const OrderFailed(this.errorMessage) : super(cart: const {});
+  const OrderFailed(this.errorMessage) : super(cart: const {}); // Now valid
 }
-// Состояния (CartState) представляют текущую "снимок состояния" корзины.

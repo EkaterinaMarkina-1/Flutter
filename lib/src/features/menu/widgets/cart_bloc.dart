@@ -12,27 +12,39 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     // Обработка события добавления товара в корзину.
     on<AddToCartEvent>((event, emit) {
-      // Создаем копию текущей корзины из состояния.
-      final updatedCart = Map<String, int>.from(state.cart);
+      final updatedCart = Map<String, CartItem>.from(state.cart);
 
-      // Обновляем количество товара:
-      // Если товар уже есть в корзине, увеличиваем количество на 1.
-      // Если товара нет, добавляем его с количеством 1.
-      updatedCart.update(event.key, (value) => value + 1, ifAbsent: () => 1);
+      updatedCart.update(
+        event.key,
+        (value) => CartItem(
+          id: value.id,
+          quantity: value.quantity + 1,
+          price: event.price, // Преобразуем строковую цену в double
+        ),
+        ifAbsent: () => CartItem(
+            id: event.key,
+            quantity: 1,
+            price: event.price), // Преобразуем строковую цену в double
+      );
 
-      // Обновляем состояние с новой корзиной.
       emit(CartUpdated(updatedCart));
     });
 
     // Обработка события удаления товара из корзины.
     on<RemoveFromCartEvent>((event, emit) {
       // Создаем копию текущей корзины.
-      final updatedCart = Map<String, int>.from(state.cart);
+      final updatedCart = Map<String, CartItem>.from(state.cart);
+      final cartItem = updatedCart[event.key];
 
-      // Если товар есть в корзине и его количество больше 0,
-      // уменьшаем количество на 1.
-      if (updatedCart[event.key] != null && updatedCart[event.key]! > 0) {
-        updatedCart.update(event.key, (value) => value - 1);
+      if (cartItem != null && cartItem.quantity > 0) {
+        updatedCart.update(
+          event.key,
+          (value) => CartItem(
+            id: value.id,
+            quantity: value.quantity - 1, // Уменьшаем количество товара
+            price: value.price,
+          ),
+        );
       }
 
       // Обновляем состояние с новой корзиной.
