@@ -31,8 +31,11 @@ class ClearCartEvent extends CartEvent {
   List<Object> get props => [];
 }
 
-// Событие для размещения заказа
+// Событие для оформления заказа.
 class PlaceOrderEvent extends CartEvent {
   @override
   List<Object> get props => [];
 }
+
+// События (CartEvent) описывают действия,
+// которые могут быть выполнены в отношении корзины.

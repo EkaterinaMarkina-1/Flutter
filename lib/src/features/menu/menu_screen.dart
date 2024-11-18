@@ -181,11 +181,13 @@ class _MenuScreenState extends State<MenuScreen> {
                                     context
                                         .read<CartBloc>()
                                         .add(AddToCartEvent(key));
+                                    addToShoppingCart(key);
                                   },
                                   removefromshoppingcart: (key) {
                                     context
                                         .read<CartBloc>()
                                         .add(RemoveFromCartEvent(key));
+                                    removeFromShoppingCart(key);
                                   });
                             }),
                           );
