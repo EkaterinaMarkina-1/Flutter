@@ -8,35 +8,36 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   // Инициализация BLoC с начальными данными.
   CartBloc() : super(CartInitial()) {
-    // Суперкласс `Bloc` вызывает конструктор с начальным состоянием `CartInitial`.
-
     // Обработка события добавления товара в корзину.
     on<AddToCartEvent>((event, emit) {
       final updatedCart = Map<String, CartItem>.from(state.cart);
 
+      // Обновляем количество товара в корзине или добавляем новый товар, если его нет.
       updatedCart.update(
         event.key,
         (value) => CartItem(
           id: value.id,
-          quantity: value.quantity + 1,
-          price: event.price, // Преобразуем строковую цену в double
+          quantity: value.quantity + 1, // Увеличиваем количество товара
+          price: event.price, // Цена товара
         ),
         ifAbsent: () => CartItem(
-            id: event.key,
-            quantity: 1,
-            price: event.price), // Преобразуем строковую цену в double
+          id: event.key,
+          quantity: 1, // Если товара нет в корзине, добавляем с количеством 1
+          price: event.price, // Преобразуем строковую цену в double
+        ),
       );
 
+      // Отправляем обновлённое состояние корзины
       emit(CartUpdated(updatedCart));
     });
 
     // Обработка события удаления товара из корзины.
     on<RemoveFromCartEvent>((event, emit) {
-      // Создаем копию текущей корзины.
       final updatedCart = Map<String, CartItem>.from(state.cart);
       final cartItem = updatedCart[event.key];
 
-      if (cartItem != null && cartItem.quantity > 0) {
+      // Уменьшаем количество товара или удаляем его, если количество стало 0.
+      if (cartItem != null && cartItem.quantity > 1) {
         updatedCart.update(
           event.key,
           (value) => CartItem(
@@ -45,44 +46,38 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             price: value.price,
           ),
         );
+      } else {
+        updatedCart.remove(event.key); // Удаляем товар, если его количество 0
       }
 
-      // Обновляем состояние с новой корзиной.
+      // Отправляем обновлённое состояние корзины
       emit(CartUpdated(updatedCart));
     });
 
     // Обработка события очистки корзины.
     on<ClearCartEvent>((event, emit) {
-      // Сбрасываем корзину до пустого состояния.
+      // Очищаем корзину
       emit(const CartUpdated({}));
     });
 
     // Обработка события оформления заказа.
     on<PlaceOrderEvent>((event, emit) async {
       try {
-        // URL API для отправки данных о заказе.
         final url = Uri.parse('https://your-api-endpoint.com/orders');
 
-        // Выполняем POST-запрос с содержимым корзины.
+        // Формируем тело запроса, отправляем корзину как JSON.
         final response = await http.post(
           url,
-          headers: {
-            'Content-Type': 'application/json'
-          }, // Указываем тип данных.
-          body: jsonEncode(state.cart), // Преобразуем корзину в JSON.
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(state.cart), // Отправляем корзину в JSON-формате
         );
 
-        // Если сервер вернул успешный ответ (код 200).
         if (response.statusCode == 200) {
-          // Уведомляем об успешном оформлении заказа.
           emit(const OrderPlaced());
         } else {
-          // Если сервер вернул ошибку, отправляем состояние ошибки.
           emit(OrderFailed(response.body));
         }
       } catch (e) {
-        // Если произошла ошибка сети или другая ошибка,
-        // отправляем состояние с сообщением об ошибке.
         emit(OrderFailed('Ошибка: $e'));
       }
     });

@@ -6,7 +6,7 @@ import 'package:lab_1_menu/src/features/menu/data/app_categories.dart';
 import 'package:lab_1_menu/src/theme/app_dimensions.dart';
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/cart_botton.dart';
+import 'package:lab_1_menu/src/features/menu/widgets/cart_button.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_event.dart';
@@ -24,7 +24,6 @@ class _MenuScreenState extends State<MenuScreen> {
   final Map<String, int> shoppingCart = {};
   final Map<String, GlobalKey> categoryButtonKeys = {};
   final Map<String, GlobalKey> categorySectionKeys = {};
-  Map<String, int> cart = {};
 
   void addToShoppingCart(String key) {
     if (shoppingCart.containsKey(key)) {
