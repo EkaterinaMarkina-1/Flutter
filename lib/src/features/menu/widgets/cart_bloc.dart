@@ -1,34 +1,32 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'cart_event.dart';
 import 'cart_state.dart';
 
 /// Класс `CartBloc` отвечает за управление состоянием корзины.
 class CartBloc extends Bloc<CartEvent, CartState> {
-  // Инициализация BLoC с начальными данными.
   CartBloc() : super(CartInitial()) {
-    // Обработка события добавления товара в корзину.
+    // Обработка события добавления товара в корзину
     on<AddToCartEvent>((event, emit) {
-      final updatedCart = Map<String, CartItem>.from(state.cart);
+      final currentCart = Map<String, CartItem>.from(state.cart);
 
-      // Обновляем количество товара в корзине или добавляем новый товар, если его нет.
-      updatedCart.update(
+      // Если товар уже есть в корзине, увеличиваем его количество
+      currentCart.update(
         event.key,
-        (value) => CartItem(
-          id: value.id,
-          quantity: value.quantity + 1, // Увеличиваем количество товара
-          price: event.price, // Цена товара
+        (existingItem) => CartItem(
+          id: existingItem.id,
+          quantity: existingItem.quantity + 1,
+          price: existingItem.price,
         ),
         ifAbsent: () => CartItem(
           id: event.key,
-          quantity: 1, // Если товара нет в корзине, добавляем с количеством 1
-          price: event.price, // Преобразуем строковую цену в double
+          quantity: 1, // Если товара нет, добавляем с количеством 1
+          price: event.price,
         ),
       );
-
-      // Отправляем обновлённое состояние корзины
-      emit(CartUpdated(updatedCart));
+      // Эмитим новое состояние с обновленной корзиной
+      emit(CartUpdated(currentCart));
     });
 
     // Обработка события удаления товара из корзины.
@@ -36,22 +34,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final updatedCart = Map<String, CartItem>.from(state.cart);
       final cartItem = updatedCart[event.key];
 
-      // Уменьшаем количество товара или удаляем его, если количество стало 0.
       if (cartItem != null && cartItem.quantity > 1) {
         updatedCart.update(
           event.key,
-          (value) => CartItem(
-            id: value.id,
-            quantity: value.quantity - 1, // Уменьшаем количество товара
-            price: value.price,
+          (existingItem) => CartItem(
+            id: existingItem.id,
+            quantity: existingItem.quantity - 1,
+            price: existingItem.price,
           ),
         );
       } else {
         updatedCart.remove(event.key); // Удаляем товар, если его количество 0
       }
 
-      // Отправляем обновлённое состояние корзины
-      emit(CartUpdated(updatedCart));
+      emit(CartUpdated(updatedCart)); // Обновляем состояние корзины
     });
 
     // Обработка события очистки корзины.

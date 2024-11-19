@@ -124,86 +124,88 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CartBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.kAppBarColor,
-          flexibleSpace: Center(
-            child: Image.asset(
-              'assets/icon/icon.png',
-              fit: BoxFit.contain,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.kAppBarColor,
+        flexibleSpace: Center(
+          child: Image.asset(
+            'assets/icon/icon.png',
+            fit: BoxFit.contain,
           ),
-          actions: const [CartButton()],
         ),
-        body: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: AppDimensions.kCategoryHeight,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _horizontalScrollController,
-                    child: Row(
-                      children: AppStrings.categories.map((category) {
-                        return CategoryButtonWidget(
-                          key: categoryButtonKeys[category],
-                          category: category,
-                          currentCategory: currentCategory,
-                          onPressed: () => _selectCategory(category),
+        actions: [
+          // Передаем название текущей категории как productName
+          CartButton(productName: currentCategory),
+        ],
+      ),
+      body: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              SizedBox(
+                height: AppDimensions.kCategoryHeight,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: _horizontalScrollController,
+                  child: Row(
+                    children: AppStrings.categories.map((category) {
+                      return CategoryButtonWidget(
+                        key: categoryButtonKeys[category],
+                        category: category,
+                        currentCategory: currentCategory,
+                        onPressed: () => _selectCategory(category),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: AppStrings.categories.map((category) {
+                      final categoryInfo = CoffeeData.coffeeInfo[category];
+                      if (categoryInfo != null) {
+                        return CategorySectionWidget(
+                          key: categorySectionKeys[category],
+                          title: category,
+                          items: List.generate(categoryInfo["products"].length,
+                              (index) {
+                            final itemName = categoryInfo["products"][index];
+                            final itemPrice = categoryInfo["prices"][itemName];
+                            return ItemCardWidget(
+                              itemName: itemName,
+                              imageUrl: categoryInfo["images"][index],
+                              cost: '${categoryInfo["prices"][itemName]} ₽',
+                              shoppingcart: shoppingCart,
+                              addtoshoppingcart: (key) {
+                                final price = itemPrice ?? 0.0;
+                                context.read<CartBloc>().add(AddToCartEvent(
+                                      key: key, // Передаем ключ товара
+                                      price: price, // Передаем цену товара
+                                    ));
+
+                                // Дополнительная логика добавления товара в корзину (если нужно)
+                                addToShoppingCart(key);
+                              },
+                              removefromshoppingcart: (key) {
+                                context.read<CartBloc>().add(
+                                    RemoveFromCartEvent(
+                                        key)); // Удаление не требует price
+                                removeFromShoppingCart(key);
+                              },
+                            );
+                          }),
                         );
-                      }).toList(),
-                    ),
+                      }
+                      return const SizedBox.shrink();
+                    }).toList(),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      children: AppStrings.categories.map((category) {
-                        final categoryInfo = CoffeeData.coffeeInfo[category];
-                        if (categoryInfo != null) {
-                          return CategorySectionWidget(
-                            key: categorySectionKeys[category],
-                            title: category,
-                            items: List.generate(
-                                categoryInfo["products"].length, (index) {
-                              final itemName = categoryInfo["products"][index];
-                              return ItemCardWidget(
-                                  itemName: itemName,
-                                  imageUrl: categoryInfo["images"][index],
-                                  cost: '${categoryInfo["prices"][itemName]} ₽',
-                                  shoppingcart: shoppingCart,
-                                  addtoshoppingcart: (key) {
-                                    final price = double.tryParse(
-                                            categoryInfo["prices"][key]
-                                                .toString()) ??
-                                        0.0;
-                                    context
-                                        .read<CartBloc>()
-                                        .add(AddToCartEvent(key, price));
-                                    addToShoppingCart(key);
-                                  },
-                                  removefromshoppingcart: (key) {
-                                    context.read<CartBloc>().add(
-                                        RemoveFromCartEvent(
-                                            key)); // Удаление не требует price
-                                    removeFromShoppingCart(key);
-                                  });
-                            }),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

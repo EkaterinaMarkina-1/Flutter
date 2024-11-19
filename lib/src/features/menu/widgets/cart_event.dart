@@ -10,7 +10,7 @@ class AddToCartEvent extends CartEvent {
   final String key;
   final double price; // Добавляем цену
 
-  AddToCartEvent(this.key, this.price);
+  AddToCartEvent({required this.key, required this.price});
 
   @override
   List<Object> get props => [key, price];

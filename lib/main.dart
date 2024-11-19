@@ -8,7 +8,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider<CartBloc>(create: (_) => CartBloc()),
+        BlocProvider<CartBloc>(create: (context) => CartBloc()),
       ],
       child: const MyApp(),
     ),
