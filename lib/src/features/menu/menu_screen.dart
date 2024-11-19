@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/category_button_widget.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/category_section_widget.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/item_card_widget.dart';
@@ -8,7 +9,6 @@ import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_button.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_event.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_state.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_bottom_sheet.dart';
@@ -21,31 +21,10 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final Map<String, int> shoppingCart = {};
   final Map<String, GlobalKey> categoryButtonKeys = {};
   final Map<String, GlobalKey> categorySectionKeys = {};
-
-  void addToShoppingCart(String key) {
-    if (shoppingCart.containsKey(key)) {
-      if (shoppingCart[key] != 10) {
-        setState(() {
-          shoppingCart[key] = (shoppingCart[key] ?? 0) + 1;
-        });
-      }
-    } else {
-      setState(() {
-        shoppingCart[key] = 1;
-      });
-    }
-  }
-
-  void removeFromShoppingCart(String key) {
-    setState(() {
-      shoppingCart[key] = (shoppingCart[key] ?? 0) - 1;
-    });
-  }
-
   String currentCategory = "Классический кофе";
+
   final ScrollController _scrollController = ScrollController();
   final ScrollController _horizontalScrollController = ScrollController();
 
@@ -134,7 +113,6 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
         actions: [
-          // Передаем название текущей категории как productName
           CartButton(productName: currentCategory),
         ],
       ),
@@ -176,23 +154,18 @@ class _MenuScreenState extends State<MenuScreen> {
                             return ItemCardWidget(
                               itemName: itemName,
                               imageUrl: categoryInfo["images"][index],
-                              cost: '${categoryInfo["prices"][itemName]} ₽',
-                              shoppingcart: shoppingCart,
+                              cost: '${itemPrice ?? 0} ₽',
                               addtoshoppingcart: (key) {
                                 final price = itemPrice ?? 0.0;
                                 context.read<CartBloc>().add(AddToCartEvent(
-                                      key: key, // Передаем ключ товара
-                                      price: price, // Передаем цену товара
+                                      key: key,
+                                      price: price,
                                     ));
-
-                                // Дополнительная логика добавления товара в корзину (если нужно)
-                                addToShoppingCart(key);
                               },
                               removefromshoppingcart: (key) {
                                 context.read<CartBloc>().add(
-                                    RemoveFromCartEvent(
-                                        key)); // Удаление не требует price
-                                removeFromShoppingCart(key);
+                                      RemoveFromCartEvent(key),
+                                    );
                               },
                             );
                           }),

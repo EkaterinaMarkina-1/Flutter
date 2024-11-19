@@ -68,6 +68,13 @@ class CartBottomSheet extends StatelessWidget {
     }
   }
 
+  // Функция для очистки корзины и закрытия BottomSheet
+  void _clearCartAndClose(BuildContext context) {
+    final cartBloc = context.read<CartBloc>();
+    cartBloc.add(ClearCartEvent()); // Очищаем корзину
+    Navigator.of(context).pop(); // Закрытие BottomSheet
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
@@ -134,6 +141,11 @@ class CartBottomSheet extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () => _placeOrder(context),
                   child: const Text('Оформить заказ'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => _clearCartAndClose(context),
+                  child: const Text('Очистить корзину'),
                 ),
               ],
             ),

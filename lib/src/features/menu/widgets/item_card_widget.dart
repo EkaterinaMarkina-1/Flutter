@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Для BlocBuilder
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'cart_quantity_widget.dart';
+import 'cart_bloc.dart';
+import 'cart_state.dart';
 
 class ItemCardWidget extends StatelessWidget {
   final String itemName;
   final String imageUrl;
   final String cost;
-  final Map<String, int> shoppingcart;
   final Function(String key) addtoshoppingcart;
   final Function(String key) removefromshoppingcart;
 
@@ -15,7 +17,6 @@ class ItemCardWidget extends StatelessWidget {
     required this.itemName,
     required this.imageUrl,
     required this.cost,
-    required this.shoppingcart,
     required this.addtoshoppingcart,
     required this.removefromshoppingcart,
   });
@@ -38,7 +39,7 @@ class ItemCardWidget extends StatelessWidget {
             const SizedBox(height: 8),
             _buildItemInfo(),
             const SizedBox(height: 8),
-            _buildActionButton(),
+            _buildActionButton(context),
           ],
         ),
       ),
@@ -91,31 +92,44 @@ class ItemCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton() {
-    if (shoppingcart[itemName] == null || shoppingcart[itemName] == 0) {
-      return ElevatedButton(
-        onPressed: () => addtoshoppingcart(itemName),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
-          backgroundColor: AppColors.kRedColor,
-          textStyle: const TextStyle(color: AppColors.kWhite),
-        ),
-        child: Text(
-          cost,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppColors.kWhite,
-          ),
-        ),
-      );
-    } else {
-      return CartQuantityWidget(
-        itemName: itemName,
-        shoppingcart: shoppingcart,
-        addtoshoppingcart: addtoshoppingcart,
-        removefromshoppingcart: removefromshoppingcart,
-      );
-    }
+  Widget _buildActionButton(BuildContext context) {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        // Создаём Map, содержащий количество каждого товара (int)
+        final Map<String, int> itemQuantities = state.cart.map((key, cartItem) {
+          return MapEntry(key, cartItem.quantity);
+        });
+
+        final itemQuantity = itemQuantities[itemName] ?? 0;
+
+        // Если товара нет в корзине, показываем кнопку добавления
+        if (itemQuantity == 0) {
+          return ElevatedButton(
+            onPressed: () => addtoshoppingcart(itemName),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 4),
+              backgroundColor: AppColors.kRedColor,
+              textStyle: const TextStyle(color: AppColors.kWhite),
+            ),
+            child: Text(
+              cost,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.kWhite,
+              ),
+            ),
+          );
+        } else {
+          // Передаем количество товаров в корзине в виджет CartQuantityWidget
+          return CartQuantityWidget(
+            itemName: itemName,
+            shoppingcart: itemQuantities, // Передаем только количество товаров
+            addtoshoppingcart: addtoshoppingcart,
+            removefromshoppingcart: removefromshoppingcart,
+          );
+        }
+      },
+    );
   }
 }
