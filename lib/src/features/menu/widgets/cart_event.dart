@@ -5,7 +5,6 @@ abstract class CartEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Событие для добавления товара в корзину
 class AddToCartEvent extends CartEvent {
   final String key;
   final double price; // Добавляем цену

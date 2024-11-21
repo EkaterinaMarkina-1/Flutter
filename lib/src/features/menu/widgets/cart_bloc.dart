@@ -56,7 +56,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(const CartUpdated({}));
     });
 
-    // Обработка события оформления заказа.
     on<PlaceOrderEvent>((event, emit) async {
       try {
         final url = Uri.parse('https://your-api-endpoint.com/orders');

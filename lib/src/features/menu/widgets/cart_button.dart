@@ -44,18 +44,19 @@ class CartButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.kAppBarColor, // Цвет фона кнопки
               borderRadius: BorderRadius.circular(50), // Скругляем углы
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.kAppBarColor,
-                  blurRadius: 10,
-                  spreadRadius: 3,
-                ),
-              ],
+              border: Border.all(
+                color: AppColors.kAppBarColor, // Цвет розовой границы
+              ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Icon(
+                  Icons.shopping_cart, // Иконка корзины
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 4), // Отступ между иконкой и текстом
                 // Отображение общей стоимости корзины
                 Text(
                   '${state.totalCost.toStringAsFixed(2)} руб.', // Форматируем стоимость с 2 знаками после запятой

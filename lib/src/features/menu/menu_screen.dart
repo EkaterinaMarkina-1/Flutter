@@ -24,7 +24,6 @@ class _MenuScreenState extends State<MenuScreen> {
   final Map<String, GlobalKey> categoryButtonKeys = {};
   final Map<String, GlobalKey> categorySectionKeys = {};
   String currentCategory = "Классический кофе";
-
   final ScrollController _scrollController = ScrollController();
   final ScrollController _horizontalScrollController = ScrollController();
 

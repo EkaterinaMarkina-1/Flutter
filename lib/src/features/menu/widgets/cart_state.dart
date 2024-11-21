@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-// Класс для представления товара в корзине, включая цену
 class CartItem extends Equatable {
-  final String id; // ID товара
-  final int quantity; // Количество
-  final double price; // Цена товара
+  final String id;
+  final int quantity;
+  final double price;
 
   const CartItem(
       {required this.id, required this.quantity, required this.price});
@@ -18,14 +17,10 @@ abstract class CartState extends Equatable {
 
   const CartState({required this.cart});
 
-  // Метод для вычисления общей стоимости с использованием reduce
   double get totalCost {
-    // Применяем reduce для вычисления общей стоимости
     return cart.values
-        .map((item) =>
-            item.price *
-            item.quantity) // Вычисляем стоимость для каждого товара
-        .reduce((a, b) => a + b); // Суммируем все стоимости
+        .map((item) => item.price * item.quantity)
+        .reduce((a, b) => a + b);
   }
 
   @override

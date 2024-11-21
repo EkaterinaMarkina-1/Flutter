@@ -95,14 +95,10 @@ class ItemCardWidget extends StatelessWidget {
   Widget _buildActionButton(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        // Создаём Map, содержащий количество каждого товара (int)
         final Map<String, int> itemQuantities = state.cart.map((key, cartItem) {
           return MapEntry(key, cartItem.quantity);
         });
-
         final itemQuantity = itemQuantities[itemName] ?? 0;
-
-        // Если товара нет в корзине, показываем кнопку добавления
         if (itemQuantity == 0) {
           return ElevatedButton(
             onPressed: () => addtoshoppingcart(itemName),
@@ -121,10 +117,9 @@ class ItemCardWidget extends StatelessWidget {
             ),
           );
         } else {
-          // Передаем количество товаров в корзине в виджет CartQuantityWidget
           return CartQuantityWidget(
             itemName: itemName,
-            shoppingcart: itemQuantities, // Передаем только количество товаров
+            shoppingcart: itemQuantities,
             addtoshoppingcart: addtoshoppingcart,
             removefromshoppingcart: removefromshoppingcart,
           );
