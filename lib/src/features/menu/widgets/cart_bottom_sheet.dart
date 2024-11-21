@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'cart_bloc.dart';
-import 'cart_state.dart';
-import 'cart_event.dart';
-import 'package:lab_1_menu/src/api/api_service.dart';
+import '../bloc/cart_bloc.dart';
+import '../bloc/cart_state.dart';
+import '../bloc/cart_event.dart';
+import 'package:lab_1_menu/api/api_service.dart';
 import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 
@@ -20,31 +20,24 @@ class CartBottomSheet extends StatelessWidget {
     final cart = state.cart;
 
     try {
-      // Формирование данных заказа
       final positions = Map<String, int>.fromEntries(
         cart.entries.map((entry) {
           final productId = _getProductIdByName(entry.key);
           final quantity = entry.value.quantity;
 
-          // Если ID найден, создаём MapEntry с продуктом, иначе пропускаем
           if (productId != null) {
-            return MapEntry(
-                productId.toString(), quantity); // Преобразуем ID в строку
+            return MapEntry(productId.toString(), quantity);
           } else {
-            return null; // Пропускаем если ID не найден
+            return null;
           }
         }).whereType<MapEntry<String, int>>(),
       );
-
-      print('Подготовка данных для отправки заказа: $positions');
-
-      // Отправка заказа через API
       final response = await ApiService.placeOrder(positions: positions);
 
       if (context.mounted) {
         if (response.statusCode == 201) {
           cartBloc.add(ClearCartEvent());
-          Navigator.of(context).pop(); // Закрытие BottomSheet
+          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Заказ успешно оформлен!'),
@@ -52,13 +45,12 @@ class CartBottomSheet extends StatelessWidget {
             ),
           );
         } else {
-          throw Exception(
-              response.body); // Вызываем исключение для обработки ошибки
+          throw Exception(response.body);
         }
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.of(context).pop(); // Закрываем BottomSheet
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Произошла ошибка, попробуйте снова'),
@@ -96,8 +88,10 @@ class CartBottomSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Корзина',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                'Корзина',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: cart.length,
@@ -109,7 +103,8 @@ class CartBottomSheet extends StatelessWidget {
                     final price = CoffeeData.coffeeInfo.entries
                         .expand((entry) => entry.value['prices'].entries)
                         .firstWhere(
-                            (priceEntry) => priceEntry.key == productName)
+                          (priceEntry) => priceEntry.key == productName,
+                        )
                         .value;
 
                     return ListTile(
@@ -125,9 +120,13 @@ class CartBottomSheet extends StatelessWidget {
                       trailing: IconButton(
                         icon: const Icon(Icons.remove_circle),
                         onPressed: () {
-                          context
-                              .read<CartBloc>()
-                              .add(RemoveFromCartEvent(productName));
+                          final cartBloc = context.read<CartBloc>();
+                          cartBloc.add(RemoveFromCartEvent(productName));
+
+                          // Проверяем, если корзина пуста, закрываем BottomSheet
+                          if (cart.length == 1) {
+                            Navigator.of(context).pop();
+                          }
                         },
                       ),
                     );
@@ -137,11 +136,12 @@ class CartBottomSheet extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => _placeOrder(context),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(AppColors.kRedColor),
-                  foregroundColor:
-                      MaterialStateProperty.all(AppColors.kAppBarColor),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.kRedColor,
+                  foregroundColor: AppColors.kAppBarColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: const Text('Оформить заказ'),
               ),
@@ -150,12 +150,19 @@ class CartBottomSheet extends StatelessWidget {
                 onPressed: () {
                   context.read<CartBloc>().add(ClearCartEvent());
                   Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Корзина очищена'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(AppColors.kTextLightColor),
-                  foregroundColor:
-                      MaterialStateProperty.all(AppColors.kAppBarColor),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.kTextLightColor,
+                  foregroundColor: AppColors.kAppBarColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: const Text('Очистить корзину'),
               ),

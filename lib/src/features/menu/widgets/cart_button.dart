@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/cart_bottom_sheet.dart'; // Импортируем BottomSheet
-import 'package:lab_1_menu/src/theme/app_colors.dart'; // Импорт цветов
-import 'cart_bloc.dart'; // Импорт блока для корзины
-// import 'cart_event.dart'; // Импорт событий корзины
-import 'cart_state.dart'; // Импорт состояния корзины
-// import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart'; // Импорт данных о кофе
+import 'package:lab_1_menu/src/features/menu/widgets/cart_bottom_sheet.dart';
+import 'package:lab_1_menu/src/theme/app_colors.dart';
+import '../bloc/cart_bloc.dart';
+import '../bloc/cart_state.dart';
 
 class CartButton extends StatelessWidget {
-  final String productName; // Название товара, который добавляется в корзину
-
-  const CartButton(
-      {super.key,
-      required this.productName}); // Конструктор, принимающий название товара
+  final String productName;
+  const CartButton({super.key, required this.productName});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
-      // Используем BlocBuilder для слушания состояния корзины
       builder: (context, state) {
-        final isCartEmpty = state.cart.isEmpty; // Проверяем, пуста ли корзина
-
-        // Если корзина пуста, скрываем кнопку
+        final isCartEmpty = state.cart.isEmpty;
         if (isCartEmpty) return const SizedBox.shrink();
-
-        // Иначе отображаем кнопку с общей стоимостью корзины
         return GestureDetector(
           onTap: () {
-            // Отображаем BottomSheet с содержимым корзины
             showModalBottomSheet(
               context: context,
               backgroundColor: Colors.white,
@@ -35,31 +24,26 @@ class CartButton extends StatelessWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               builder: (context) => BlocProvider.value(
-                value: context.read<CartBloc>(), // Передаем существующий Bloc
-                child: const CartBottomSheet(), // Отображаем виджет с корзиной
+                value: context.read<CartBloc>(),
+                child: const CartBottomSheet(),
               ),
             );
           },
           child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.kAppBarColor, // Цвет фона кнопки
-              borderRadius: BorderRadius.circular(50), // Скругляем углы
-              border: Border.all(
-                color: AppColors.kAppBarColor, // Цвет розовой границы
-              ),
+            decoration: const BoxDecoration(
+              color: AppColors.kAppBarColor,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
-                  Icons.shopping_cart, // Иконка корзины
+                  Icons.shopping_cart,
                   color: Colors.white,
                 ),
-                const SizedBox(width: 4), // Отступ между иконкой и текстом
-                // Отображение общей стоимости корзины
+                const SizedBox(width: 4),
                 Text(
-                  '${state.totalCost.toStringAsFixed(2)} руб.', // Форматируем стоимость с 2 знаками после запятой
+                  '${state.totalCost.toStringAsFixed(2)} руб.',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

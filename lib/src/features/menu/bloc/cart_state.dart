@@ -34,13 +34,3 @@ class CartInitial extends CartState {
 class CartUpdated extends CartState {
   const CartUpdated(Map<String, CartItem> cart) : super(cart: cart);
 }
-
-class OrderPlaced extends CartState {
-  const OrderPlaced() : super(cart: const {}); // Now valid
-}
-
-class OrderFailed extends CartState {
-  final String errorMessage;
-
-  const OrderFailed(this.errorMessage) : super(cart: const {}); // Now valid
-}

@@ -7,7 +7,7 @@ abstract class CartEvent extends Equatable {
 
 class AddToCartEvent extends CartEvent {
   final String key;
-  final double price; // Добавляем цену
+  final double price;
 
   AddToCartEvent({required this.key, required this.price});
 
@@ -15,7 +15,6 @@ class AddToCartEvent extends CartEvent {
   List<Object> get props => [key, price];
 }
 
-// Событие для удаления товара из корзины
 class RemoveFromCartEvent extends CartEvent {
   final String key;
 
@@ -25,8 +24,4 @@ class RemoveFromCartEvent extends CartEvent {
   List<Object> get props => [key];
 }
 
-// Событие для очистки корзины
 class ClearCartEvent extends CartEvent {}
-
-// Событие для оформления заказа
-class PlaceOrderEvent extends CartEvent {}

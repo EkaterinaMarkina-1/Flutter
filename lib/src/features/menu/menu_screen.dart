@@ -8,9 +8,9 @@ import 'package:lab_1_menu/src/theme/app_dimensions.dart';
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_button.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/cart_bloc.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/cart_event.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/cart_state.dart';
+import 'package:lab_1_menu/src/features/menu/bloc/cart_bloc.dart';
+import 'package:lab_1_menu/src/features/menu/bloc/cart_event.dart';
+import 'package:lab_1_menu/src/features/menu/bloc/cart_state.dart';
 import 'package:lab_1_menu/src/features/menu/widgets/cart_bottom_sheet.dart';
 
 class MenuScreen extends StatefulWidget {

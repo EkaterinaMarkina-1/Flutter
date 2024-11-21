@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Для BlocBuilder
 import 'package:lab_1_menu/src/theme/app_colors.dart';
 import 'cart_quantity_widget.dart';
-import 'cart_bloc.dart';
-import 'cart_state.dart';
+import '../bloc/cart_bloc.dart';
+import '../bloc/cart_state.dart';
 
 class ItemCardWidget extends StatelessWidget {
   final String itemName;
