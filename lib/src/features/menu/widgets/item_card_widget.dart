@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Для BlocBuilder
-import 'package:lab_1_menu/src/theme/app_colors.dart';
+import 'package:cofe_fest/src/theme/app_colors.dart';
 import 'cart_quantity_widget.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_state.dart';

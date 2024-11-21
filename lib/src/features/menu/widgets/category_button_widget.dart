@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lab_1_menu/src/theme/app_colors.dart';
+import 'package:cofe_fest/src/theme/app_colors.dart';
 
 class CategoryButtonWidget extends StatelessWidget {
   final String category;

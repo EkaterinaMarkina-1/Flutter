@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lab_1_menu/src/features/menu/widgets/quantity_button.dart';
+import 'package:cofe_fest/src/features/menu/widgets/quantity_button.dart';
 
 class CartQuantityWidget extends StatelessWidget {
   final String itemName;

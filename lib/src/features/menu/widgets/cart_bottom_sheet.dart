@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_state.dart';
 import '../bloc/cart_event.dart';
-import 'package:lab_1_menu/api/api_service.dart';
-import 'package:lab_1_menu/src/features/menu/data/coffee_data.dart';
-import 'package:lab_1_menu/src/theme/app_colors.dart';
+import 'package:cofe_fest/api/api_service.dart';
+import 'package:cofe_fest/src/features/menu/data/coffee_data.dart';
+import 'package:cofe_fest/src/theme/app_colors.dart';
 
 class CartBottomSheet extends StatelessWidget {
   const CartBottomSheet({super.key});
