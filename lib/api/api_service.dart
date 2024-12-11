@@ -7,31 +7,28 @@ class ApiService {
 
   static Future<List<MenuCategoryDto>> fetchCategories() async {
     final url = Uri.parse('$baseUrl/api/v1/products/categories');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final responseData = utf8.decode(response.bodyBytes);
-        final jsonResponse = json.decode(responseData);
+    final response = await http.get(url);
 
-        if (jsonResponse is Map && jsonResponse.containsKey('data')) {
-          final categories = jsonResponse['data'];
+    if (response.statusCode == 200) {
+      final responseData = utf8.decode(response.bodyBytes);
+      final jsonResponse = json.decode(responseData);
 
-          if (categories is List) {
-            return categories
-                .map<MenuCategoryDto>((json) => MenuCategoryDto.fromJson(json))
-                .toList();
-          } else {
-            throw Exception('Ошибка: "data" не является списком');
-          }
+      if (jsonResponse is Map && jsonResponse.containsKey('data')) {
+        final categories = jsonResponse['data'];
+
+        if (categories is List) {
+          return categories
+              .map<MenuCategoryDto>((json) => MenuCategoryDto.fromJson(json))
+              .toList();
         } else {
-          throw Exception(
-              'Ошибка: Отсутствует ключ "data" или структура неправильная');
+          throw Exception('Ошибка: "data" не является списком');
         }
       } else {
-        throw Exception('Ошибка загрузки категорий');
+        throw Exception(
+            'Ошибка: Отсутствует ключ "data" или структура неправильная');
       }
-    } catch (e) {
-      throw Exception('Ошибка получения категорий: $e');
+    } else {
+      throw Exception('Ошибка загрузки категорий');
     }
   }
 
@@ -42,29 +39,26 @@ class ApiService {
   }) async {
     final url = Uri.parse(
         '$baseUrl/api/v1/products?category_id=$category&page=$page&limit=$limit');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final responseData = utf8.decode(response.bodyBytes);
-        final jsonResponse = json.decode(responseData);
+    final response = await http.get(url);
 
-        if (jsonResponse is Map && jsonResponse.containsKey('data')) {
-          final products = jsonResponse['data'];
+    if (response.statusCode == 200) {
+      final responseData = utf8.decode(response.bodyBytes);
+      final jsonResponse = json.decode(responseData);
 
-          if (products is List) {
-            return products;
-          } else {
-            throw Exception('Ошибка: "data" не является списком');
-          }
+      if (jsonResponse is Map && jsonResponse.containsKey('data')) {
+        final products = jsonResponse['data'];
+
+        if (products is List) {
+          return products;
         } else {
-          throw Exception(
-              'Ошибка: Отсутствует ключ "data" или структура неправильная');
+          throw Exception('Ошибка: "data" не является списком');
         }
       } else {
-        throw Exception('Ошибка загрузки товаров');
+        throw Exception(
+            'Ошибка: Отсутствует ключ "data" или структура неправильная');
       }
-    } catch (e) {
-      throw Exception('Ошибка получения товаров: $e');
+    } else {
+      throw Exception('Ошибка загрузки товаров');
     }
   }
 
