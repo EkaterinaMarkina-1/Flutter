@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:cofe_fest/src/features/menu/widgets/quantity_button.dart';
 
 class CartQuantityWidget extends StatelessWidget {
-  final String itemName;
-  final Map<String, int> shoppingcart;
-  final Function(String key) addtoshoppingcart;
-  final Function(String key) removefromshoppingcart;
+  final String productId;
+  final int quantity;
+  final Function(String productId) addToShoppingCart;
+  final Function(String productId) removeFromShoppingCart;
 
   const CartQuantityWidget({
     super.key,
-    required this.itemName,
-    required this.shoppingcart,
-    required this.addtoshoppingcart,
-    required this.removefromshoppingcart,
+    required this.productId,
+    required this.quantity,
+    required this.addToShoppingCart,
+    required this.removeFromShoppingCart,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         QuantityButton(
           label: '-',
           onPressed: () {
-            removefromshoppingcart(itemName);
+            removeFromShoppingCart(productId);
           },
         ),
         const SizedBox(width: 16),
         Text(
-          shoppingcart[itemName].toString(),
+          quantity.toString(),
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -38,7 +38,7 @@ class CartQuantityWidget extends StatelessWidget {
         QuantityButton(
           label: '+',
           onPressed: () {
-            addtoshoppingcart(itemName);
+            addToShoppingCart(productId);
           },
         ),
       ],

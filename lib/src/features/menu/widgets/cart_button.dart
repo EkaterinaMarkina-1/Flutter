@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cofe_fest/src/features/menu/widgets/cart_bottom_sheet.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
-import '../bloc/cart_bloc.dart';
-import '../bloc/cart_state.dart';
+import 'package:cofe_fest/src/features/menu/cart/bloc/cart_bloc.dart';
+import 'package:cofe_fest/src/features/menu/cart/bloc/cart_state.dart';
 
 class CartButton extends StatelessWidget {
   final String productName;

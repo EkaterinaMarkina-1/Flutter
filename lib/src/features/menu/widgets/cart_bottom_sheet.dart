@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/cart_bloc.dart';
-import '../bloc/cart_state.dart';
-import '../bloc/cart_event.dart';
+import 'package:cofe_fest/src/features/menu/cart/bloc/cart_bloc.dart';
+import 'package:cofe_fest/src/features/menu/cart/bloc/cart_state.dart';
+import 'package:cofe_fest/src/features/menu/cart/bloc/cart_event.dart';
 import 'package:cofe_fest/api/api_service.dart';
-import 'package:cofe_fest/src/features/menu/data/coffee_data.dart';
+import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
+import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
 
 class CartBottomSheet extends StatelessWidget {
@@ -22,16 +23,17 @@ class CartBottomSheet extends StatelessWidget {
     try {
       final positions = Map<String, int>.fromEntries(
         cart.entries.map((entry) {
-          final productId = _getProductIdByName(entry.key);
+          final productData = _getProductById(context, entry.key);
           final quantity = entry.value.quantity;
 
-          if (productId != null) {
-            return MapEntry(productId.toString(), quantity);
+          if (productData['name'] != '') {
+            return MapEntry(productData['name'], quantity);
           } else {
             return null;
           }
         }).whereType<MapEntry<String, int>>(),
       );
+
       final response = await ApiService.placeOrder(positions: positions);
 
       if (context.mounted) {
@@ -61,20 +63,26 @@ class CartBottomSheet extends StatelessWidget {
     }
   }
 
-  int? _getProductIdByName(String name) {
-    final products = <String, int>{};
+  Map<String, dynamic> _getProductById(BuildContext context, String id) {
+    final menuState = BlocProvider.of<MenuBloc>(context).state;
 
-    const categories = CoffeeData.coffeeInfo;
-    int idCounter = 1;
-
-    categories.forEach((category, data) {
-      final productsInCategory = data['products'] as List<String>;
-      for (var product in productsInCategory) {
-        products[product] = idCounter++;
+    if (menuState is MenuLoadedState) {
+      for (var category in menuState.categoryWithProducts.entries) {
+        for (var product in category.value) {
+          if (product.id.toString() == id) {
+            final price = product.prices.isNotEmpty
+                ? '${product.prices.first.value} ₽'
+                : '0 ₽';
+            return {
+              'name': product.name,
+              'price': price,
+              'imageUrl': product.imageUrl,
+            };
+          }
+        }
       }
-    });
-
-    return products[name];
+    } else {}
+    return {'name': '', 'price': '0 ₽', 'imageUrl': ''};
   }
 
   @override
@@ -97,33 +105,29 @@ class CartBottomSheet extends StatelessWidget {
                   itemCount: cart.length,
                   itemBuilder: (context, index) {
                     final entry = cart.entries.elementAt(index);
-                    final productName = entry.key;
+                    final productData = _getProductById(context, entry.key);
                     final quantity = entry.value.quantity;
-
-                    final price = CoffeeData.coffeeInfo.entries
-                        .expand((entry) => entry.value['prices'].entries)
-                        .firstWhere(
-                          (priceEntry) => priceEntry.key == productName,
-                        )
-                        .value;
+                    final price = productData['price'];
+                    final productImageUrl = productData['imageUrl'];
 
                     return ListTile(
-                      leading: Image.asset(
-                        CoffeeData.coffeeInfo.entries
-                            .expand((entry) => entry.value['images'])
-                            .toList()[index % 8],
-                        width: 50,
-                        height: 50,
-                      ),
-                      title: Text(productName),
-                      subtitle: Text('$price ₽ x $quantity'),
+                      leading: productImageUrl.isNotEmpty
+                          ? Image.network(productImageUrl,
+                              width: 50, height: 50)
+                          : Container(
+                              width: 50,
+                              height: 50,
+                              color: Colors.grey,
+                              child: const Center(child: Text('N/A')),
+                            ),
+                      title: Text(productData['name']),
+                      subtitle: Text('$price x $quantity'),
                       trailing: IconButton(
                         icon: const Icon(Icons.remove_circle),
                         onPressed: () {
-                          final cartBloc = context.read<CartBloc>();
-                          cartBloc.add(RemoveFromCartEvent(productName));
-
-                          // Проверяем, если корзина пуста, закрываем BottomSheet
+                          context
+                              .read<CartBloc>()
+                              .add(RemoveFromCartEvent(entry.key));
                           if (cart.length == 1) {
                             Navigator.of(context).pop();
                           }

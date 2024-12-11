@@ -20,7 +20,7 @@ abstract class CartState extends Equatable {
   double get totalCost {
     return cart.values
         .map((item) => item.price * item.quantity)
-        .reduce((a, b) => a + b);
+        .fold(0.0, (a, b) => a + b);
   }
 
   @override
