@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
 
-abstract class MenuState extends Equatable {
+sealed class MenuState extends Equatable {
   @override
   List<Object?> get props => [];
 }

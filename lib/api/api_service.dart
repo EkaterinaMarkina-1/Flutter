@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
 
-class ApiService {
+import 'package:cofe_fest/src/features/menu/bloc/menu_data_source.dart';
+
+class ApiService implements IMenuDataSource {
   static const String baseUrl = 'https://coffeeshop.academy.effective.band';
 
-  static Future<List<MenuCategoryDto>> fetchCategories() async {
+  @override
+  Future<List<MenuCategoryDto>> fetchCategories() async {
     final url = Uri.parse('$baseUrl/api/v1/products/categories');
     final response = await http.get(url);
 
@@ -15,7 +18,6 @@ class ApiService {
 
       if (jsonResponse is Map && jsonResponse.containsKey('data')) {
         final categories = jsonResponse['data'];
-
         if (categories is List) {
           return categories
               .map<MenuCategoryDto>((json) => MenuCategoryDto.fromJson(json))
@@ -32,7 +34,8 @@ class ApiService {
     }
   }
 
-  static Future<List<dynamic>> fetchProducts({
+  @override
+  Future<List<dynamic>> fetchProducts({
     required String category,
     required int page,
     required int limit,
@@ -47,7 +50,6 @@ class ApiService {
 
       if (jsonResponse is Map && jsonResponse.containsKey('data')) {
         final products = jsonResponse['data'];
-
         if (products is List) {
           return products;
         } else {

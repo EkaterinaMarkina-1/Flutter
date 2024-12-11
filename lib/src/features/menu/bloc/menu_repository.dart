@@ -1,15 +1,22 @@
-import 'package:cofe_fest/api/api_service.dart';
+import 'package:cofe_fest/src/features/menu/bloc/interfaces/IMenuRepository.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
+import 'package:cofe_fest/src/features/menu/bloc/menu_data_source.dart'; 
 
-class MenuRepository {
+class MenuRepository implements IMenuRepository {
+  final IMenuDataSource _menuDataSource;
+
+  MenuRepository({required IMenuDataSource menuDataSource})
+      : _menuDataSource = menuDataSource;
+
+  @override
   Future<Map<MenuCategoryDto, List<MenuProductDto>>>
       fetchCategoriesWithProducts({
     int limitPerCategory = 7,
     int maxCategories = 10,
   }) async {
     try {
-      final categories = await ApiService.fetchCategories();
+      final categories = await _menuDataSource.fetchCategories();
       final limitedCategories = categories.take(maxCategories).toList();
 
       final results = await Future.wait(limitedCategories.map((category) {
@@ -32,7 +39,7 @@ class MenuRepository {
     int limitPerCategory,
   ) async {
     try {
-      final products = await ApiService.fetchProducts(
+      final products = await _menuDataSource.fetchProducts(
         category: category.slug,
         page: page,
         limit: limitPerCategory,
