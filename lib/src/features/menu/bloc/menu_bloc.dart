@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_event.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
-import 'package:cofe_fest/src/features/menu/bloc/menu_repository.dart';
+import 'package:cofe_fest/src/features/menu/data/menu_repository.dart';
 
 class MenuBloc extends Bloc<MenuEvent, MenuState> {
   final MenuRepository menuRepository;

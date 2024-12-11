@@ -1,7 +1,7 @@
 import 'package:cofe_fest/src/features/menu/bloc/interfaces/IMenuRepository.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
-import 'package:cofe_fest/src/features/menu/bloc/menu_data_source.dart'; 
+import 'package:cofe_fest/src/features/menu/data/data_sources/menu_data_source.dart'; 
 
 class MenuRepository implements IMenuRepository {
   final IMenuDataSource _menuDataSource;
