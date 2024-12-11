@@ -5,8 +5,8 @@ import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
 class MenuRepository {
   Future<Map<MenuCategoryDto, List<MenuProductDto>>>
       fetchCategoriesWithProducts({
-    int limitPerCategory = 5,
-    int maxCategories = 7,
+    int limitPerCategory = 7,
+    int maxCategories = 10,
   }) async {
     try {
       final categories = await ApiService.fetchCategories();
