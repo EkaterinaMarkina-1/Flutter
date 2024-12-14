@@ -8,7 +8,6 @@ import 'package:cofe_fest/api/api_service.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
-import 'package:cofe_fest/src/theme/consts.dart';
 
 class CartBottomSheet extends StatelessWidget {
   const CartBottomSheet({super.key});

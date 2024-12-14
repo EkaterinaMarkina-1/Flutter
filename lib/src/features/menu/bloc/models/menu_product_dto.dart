@@ -20,13 +20,11 @@ class MenuProductDto {
     this.imageUrl,
   });
 
-  // JSON parsing
   factory MenuProductDto.fromJson(Map<String, dynamic> json) =>
       _$MenuProductDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$MenuProductDtoToJson(this);
 
-  // For database operations
   factory MenuProductDto.fromMap(Map<String, dynamic> map) {
     return MenuProductDto(
       id: map['id'],

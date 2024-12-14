@@ -7,10 +7,9 @@ import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/data/menu_repository.dart';
 import 'package:cofe_fest/api/api_service.dart';
 import 'src/features/menu/data/database/sqlite.dart';
-import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Инициализация Flutter
+  WidgetsFlutterBinding.ensureInitialized();
   final databaseHelper = DatabaseHelper.instance;
 
   try {
@@ -31,8 +30,6 @@ void main() async {
       ),
     );
   } catch (e) {
-    print("Ошибка при инициализации: $e");
+    Null;
   }
 }
-
-
