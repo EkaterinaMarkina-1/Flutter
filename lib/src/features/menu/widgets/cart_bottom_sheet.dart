@@ -8,6 +8,7 @@ import 'package:cofe_fest/api/api_service.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
+import 'package:cofe_fest/src/theme/consts.dart';
 
 class CartBottomSheet extends StatelessWidget {
   const CartBottomSheet({super.key});
@@ -111,7 +112,7 @@ class CartBottomSheet extends StatelessWidget {
                     final productImageUrl = productData['imageUrl'];
 
                     return ListTile(
-                      leading: productImageUrl.isNotEmpty
+                      leading: productImageUrl != null
                           ? Image.network(productImageUrl,
                               width: 50, height: 50)
                           : Container(
@@ -128,7 +129,7 @@ class CartBottomSheet extends StatelessWidget {
                           context
                               .read<CartBloc>()
                               .add(RemoveFromCartEvent(entry.key));
-                          if (cart.length == 1) {
+                          if (cart.isEmpty) {
                             Navigator.of(context).pop();
                           }
                         },

@@ -8,21 +8,52 @@ class MenuProductDto {
   final int id;
   final String name;
   final MenuCategoryDto category;
-  final String imageUrl;
+  final String? imageUrl;
+
   final List<MenuProductPriceDto> prices;
 
   MenuProductDto({
     required this.id,
     required this.name,
     required this.category,
-    required this.imageUrl,
     required this.prices,
+    this.imageUrl,
   });
 
+  // JSON parsing
   factory MenuProductDto.fromJson(Map<String, dynamic> json) =>
       _$MenuProductDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$MenuProductDtoToJson(this);
+
+  // For database operations
+  factory MenuProductDto.fromMap(Map<String, dynamic> map) {
+    return MenuProductDto(
+      id: map['id'],
+      name: map['name'],
+      category: MenuCategoryDto.fromMap({
+        'id': map['categoryId'],
+        'slug': map['categorySlug'],
+      }),
+      prices: [
+        MenuProductPriceDto(
+          value: map['priceValue'].toString(),
+          currency: map['priceCurrency'] ?? 'RUB',
+        ),
+      ],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'categoryId': category.id,
+      'categorySlug': category.slug,
+      'priceValue': prices[0].value,
+      'priceCurrency': 'RUB',
+    };
+  }
 
   @override
   String toString() {

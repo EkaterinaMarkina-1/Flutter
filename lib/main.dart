@@ -6,18 +6,33 @@ import 'package:provider/provider.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/data/menu_repository.dart';
 import 'package:cofe_fest/api/api_service.dart';
+import 'src/features/menu/data/database/sqlite.dart';
+import 'package:cofe_fest/src/features/menu/bloc/models/menu_product_dto.dart';
 
-void main() {
-  final menuRepository = MenuRepository(menuDataSource: ApiService());
-  runApp(
-    MultiProvider(
-      providers: [
-        BlocProvider<CartBloc>(create: (context) => CartBloc()),
-        BlocProvider<MenuBloc>(
-          create: (context) => MenuBloc(menuRepository: menuRepository),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Инициализация Flutter
+  final databaseHelper = DatabaseHelper.instance;
+
+  try {
+    final menuRepository = MenuRepository(
+      menuDataSource: ApiService(),
+      databaseHelper: databaseHelper,
+    );
+
+    runApp(
+      MultiProvider(
+        providers: [
+          BlocProvider<CartBloc>(create: (context) => CartBloc()),
+          BlocProvider<MenuBloc>(
+            create: (context) => MenuBloc(menuRepository: menuRepository),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
+  } catch (e) {
+    print("Ошибка при инициализации: $e");
+  }
 }
+
+

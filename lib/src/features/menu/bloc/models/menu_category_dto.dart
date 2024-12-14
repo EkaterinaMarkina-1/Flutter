@@ -9,10 +9,26 @@ class MenuCategoryDto {
 
   MenuCategoryDto({required this.id, required this.slug});
 
+  // JSON-парсинг
   factory MenuCategoryDto.fromJson(Map<String, dynamic> json) =>
       _$MenuCategoryDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$MenuCategoryDtoToJson(this);
+
+  // Для работы с базой данных
+  factory MenuCategoryDto.fromMap(Map<String, dynamic> map) {
+    return MenuCategoryDto(
+      id: map['id'],
+      slug: map['slug'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'slug': slug,
+    };
+  }
 
   @override
   String toString() {
