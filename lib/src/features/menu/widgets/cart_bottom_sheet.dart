@@ -128,7 +128,7 @@ class CartBottomSheet extends StatelessWidget {
                           context
                               .read<CartBloc>()
                               .add(RemoveFromCartEvent(entry.key));
-                          if (cart.length == 1) {
+                          if (cart.isEmpty) {
                             Navigator.of(context).pop();
                           }
                         },
