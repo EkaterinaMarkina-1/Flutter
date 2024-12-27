@@ -1,3 +1,4 @@
+import 'package:cofe_fest/src/theme/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
@@ -8,7 +9,7 @@ import '../cart/bloc/cart_state.dart';
 class ItemCardWidget extends StatelessWidget {
   final String productId;
   final String itemName;
-  final String imageUrl;
+  final String? imageUrl;
   final String cost;
   final Function(String key) addToShoppingCart;
   final Function(String key) removeFromShoppingCart;
@@ -66,9 +67,9 @@ class ItemCardWidget extends StatelessWidget {
   Widget _buildImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: imageUrl.isNotEmpty
+      child: imageUrl != null
           ? Image.network(
-              imageUrl,
+              imageUrl!,
               fit: BoxFit.cover,
               width: 100,
               height: 100,
@@ -95,8 +96,15 @@ class ItemCardWidget extends StatelessWidget {
               },
             )
           : Container(
-              color: Colors.grey,
-              child: const Center(child: Text('Изображение отсутствует')),
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: const DecorationImage(
+                  image: AssetImage(PathLib.defaultImagePath),
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
     );
   }

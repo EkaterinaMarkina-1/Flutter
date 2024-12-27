@@ -14,6 +14,20 @@ class MenuCategoryDto {
 
   Map<String, dynamic> toJson() => _$MenuCategoryDtoToJson(this);
 
+  factory MenuCategoryDto.fromMap(Map<String, dynamic> map) {
+    return MenuCategoryDto(
+      id: map['id'],
+      slug: map['slug'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'slug': slug,
+    };
+  }
+
   @override
   String toString() {
     return 'Category(id: $id, slug: $slug)';

@@ -111,7 +111,7 @@ class CartBottomSheet extends StatelessWidget {
                     final productImageUrl = productData['imageUrl'];
 
                     return ListTile(
-                      leading: productImageUrl.isNotEmpty
+                      leading: productImageUrl != null
                           ? Image.network(productImageUrl,
                               width: 50, height: 50)
                           : Container(

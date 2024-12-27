@@ -22,9 +22,9 @@ Map<String, dynamic> _$MenuProductDtoToJson(MenuProductDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'category': instance.category,
+      'category': instance.category.toJson(),
       'imageUrl': instance.imageUrl,
-      'prices': instance.prices,
+      'prices': instance.prices.map((e) => e.toJson()).toList(),
     };
 
 MenuProductPriceDto _$MenuProductPriceDtoFromJson(Map<String, dynamic> json) =>
