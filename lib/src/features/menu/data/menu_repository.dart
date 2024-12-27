@@ -38,7 +38,6 @@ class MenuRepository implements IMenuRepository {
           limitedCategories[i]: results[i],
       };
     } catch (e) {
-      print(e);
       return _loadFromDatabase();
     }
   }
