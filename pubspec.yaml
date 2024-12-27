@@ -20,6 +20,9 @@ dependencies:
   path: ^1.9.0
   sqflite: ^2.3.3+1
   connectivity_plus: ^3.0.3
+  yandex_maps_mapkit_lite:
+    version: ^4.10.0-beta
+  shared_preferences: ^2.0.18
 
 dev_dependencies:
   flutter_launcher_icons: ^0.10.0

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cofe_fest/src/features/menu/location/location.dart';
+import 'package:cofe_fest/src/features/menu/widgets/location_screen.dart';
+import 'package:cofe_fest/api/api_service.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_event.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
@@ -22,6 +26,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  String selectedAddress = "Выберите адрес";
   final Map<int, GlobalKey> categoryButtonKeys = {};
   final Map<int, GlobalKey> categorySectionKeys = {};
   int? currentCategoryId;
@@ -32,6 +37,7 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    _loadAddress();
     _scrollController.addListener(_scrollListener);
     context.read<MenuBloc>().add(LoadMenuEvent());
   }
@@ -98,6 +104,60 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  void _navigateToLocationScreen() async {
+  final apiService = ApiService();
+
+  try {
+    // Загрузка списка локаций
+    final locations = await apiService.fetchLocations();
+
+    // Проверка, что виджет ещё смонтирован
+    if (!mounted) return;
+
+    // Переход на экран выбора адреса
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(
+          locations: locations,
+          currentAddress: selectedAddress,
+        ),
+      ),
+    );
+
+    // Проверка, что виджет ещё смонтирован
+    if (!mounted) return;
+
+    if (result != null && result is Location) {
+      setState(() {
+        selectedAddress = result.address;  // Use 'address' instead of 'name'
+      });
+      _saveAddress(result.address);  // Use 'address' instead of 'name'
+    }
+  } catch (e) {
+    _showErrorSnackbar("Ошибка загрузки локаций: ${e.toString()}");
+  }
+}
+
+
+  void _saveAddress(String address) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedAddress', address);
+  }
+
+  void _loadAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedAddress = prefs.getString('selectedAddress') ?? "Выберите адрес";
+    });
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   void showCartBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -112,6 +172,26 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.kAppBarColor,
+        leading: GestureDetector(
+          onTap: _navigateToLocationScreen, // Переход на экран выбора адреса
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                const Icon(Icons.location_on,
+                    color: Colors.white), // Иконка адреса
+                Expanded(
+                  child: Text(
+                    selectedAddress,
+                    style: const TextStyle(color: Colors.white),
+                    overflow: TextOverflow
+                        .ellipsis, // Обрезка текста, если он слишком длинный
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         flexibleSpace: Center(
           child: Image.asset(
             'assets/icon/icon.png',
@@ -123,7 +203,6 @@ class _MenuScreenState extends State<MenuScreen> {
         ],
       ),
       body: BlocBuilder<MenuBloc, MenuState>(
-        // Строим меню с продуктами
         builder: (context, state) {
           if (state is MenuLoadingState) {
             return const Center(child: CircularProgressIndicator());
