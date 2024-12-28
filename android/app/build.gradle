@@ -12,6 +12,7 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
+def yandexApiKey = localProperties.getProperty('yandex.maps.api.key')
 
 def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
 if (flutterVersionCode == null) {
@@ -56,4 +57,7 @@ android {
 
 flutter {
     source = "../.."
+}
+dependencies {
+    implementation 'com.yandex.android:maps.mobile:4.2.2-full'
 }

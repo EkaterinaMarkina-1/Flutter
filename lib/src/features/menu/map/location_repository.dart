@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'location.dart';
+import 'package:cofe_fest/src/features/menu/map/location.dart';
 
 class LocationRepository {
   static const String baseUrl = 'https://coffeeshop.academy.effective.band';
@@ -15,16 +15,11 @@ class LocationRepository {
 
       if (jsonResponse is Map && jsonResponse.containsKey('data')) {
         final locations = jsonResponse['data'];
-        if (locations is List) {
-          return locations
-              .map<Location>((json) => Location.fromJson(json))
-              .toList();
-        } else {
-          throw Exception('Ошибка: "data" не является списком');
-        }
+        return locations
+            .map<Location>((json) => Location.fromJson(json))
+            .toList();
       } else {
-        throw Exception(
-            'Ошибка: Отсутствует ключ "data" или структура неправильная');
+        throw Exception('Ошибка: неверный формат данных');
       }
     } else {
       throw Exception('Ошибка загрузки локаций');

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cofe_fest/src/features/menu/location/location.dart';
-import 'package:cofe_fest/src/features/menu/widgets/location_screen.dart';
-import 'package:cofe_fest/api/api_service.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_event.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_state.dart';
@@ -14,6 +11,8 @@ import 'package:cofe_fest/src/features/menu/widgets/cart_button.dart';
 import 'package:cofe_fest/src/features/menu/widgets/cart_bottom_sheet.dart';
 import 'package:cofe_fest/src/theme/app_dimensions.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
+import 'package:cofe_fest/src/features/menu/map/map_screen.dart'; // Импорт MapScreen
+
 import 'cart/bloc/cart_bloc.dart';
 import 'cart/bloc/cart_event.dart';
 import 'bloc/models/menu_category_dto.dart';
@@ -104,41 +103,23 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  void _navigateToLocationScreen() async {
-  final apiService = ApiService();
-
-  try {
-    // Загрузка списка локаций
-    final locations = await apiService.fetchLocations();
-
-    // Проверка, что виджет ещё смонтирован
-    if (!mounted) return;
-
-    // Переход на экран выбора адреса
+  void _navigateToMapScreen() async {
+    // Навигация к экрану карты
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LocationScreen(
-          locations: locations,
-          currentAddress: selectedAddress,
-        ),
-      ),
+          builder: (context) => const MapScreen()), // Переход на MapScreen
     );
 
-    // Проверка, что виджет ещё смонтирован
-    if (!mounted) return;
-
-    if (result != null && result is Location) {
+    // Здесь можно обрабатывать результат, если необходимо
+    if (result != null) {
       setState(() {
-        selectedAddress = result.address;  // Use 'address' instead of 'name'
+        selectedAddress =
+            result.address; // Если результатом будет выбранный адрес
       });
-      _saveAddress(result.address);  // Use 'address' instead of 'name'
+      _saveAddress(result.address); // Сохранить выбранный адрес
     }
-  } catch (e) {
-    _showErrorSnackbar("Ошибка загрузки локаций: ${e.toString()}");
   }
-}
-
 
   void _saveAddress(String address) async {
     final prefs = await SharedPreferences.getInstance();
@@ -152,7 +133,7 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
-  void _showErrorSnackbar(String message) {
+  void showErrorSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
@@ -173,7 +154,8 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.kAppBarColor,
         leading: GestureDetector(
-          onTap: _navigateToLocationScreen, // Переход на экран выбора адреса
+          onTap:
+              _navigateToMapScreen, // Открыть MapScreen вместо _navigateToLocationScreen
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
 
 import 'package:cofe_fest/src/features/menu/data/data_sources/menu_data_source.dart';
-import 'package:cofe_fest/src/features/menu/location/location.dart';
+import 'package:cofe_fest/src/features/menu/map/location.dart';
 
 class ApiService implements IMenuDataSource {
   static const String baseUrl = 'https://coffeeshop.academy.effective.band';

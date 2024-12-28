@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cofe_fest/src/features/menu/location/location.dart';
+import 'package:cofe_fest/src/features/menu/map/location.dart';
 
 class LocationScreen extends StatelessWidget {
   final List<Location> locations;

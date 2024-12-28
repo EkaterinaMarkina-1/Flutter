@@ -1,7 +1,15 @@
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://maven.pkg.github.com/yandex/mapkit-android" } 
     }
 }
 
