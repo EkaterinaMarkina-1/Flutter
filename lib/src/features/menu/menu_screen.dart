@@ -10,7 +10,7 @@ import 'package:cofe_fest/src/features/menu/widgets/item_card_widget.dart';
 import 'package:cofe_fest/src/features/menu/widgets/cart_button.dart';
 import 'package:cofe_fest/src/theme/app_dimensions.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
-import 'package:cofe_fest/src/features/menu/map/map_screen.dart';
+import 'package:cofe_fest/src/features/menu/widgets/map_screen.dart';
 import 'cart/bloc/cart_bloc.dart';
 import 'cart/bloc/cart_event.dart';
 import 'bloc/models/menu_category_dto.dart';

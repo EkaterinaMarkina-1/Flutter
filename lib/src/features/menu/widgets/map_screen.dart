@@ -3,8 +3,8 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'package:cofe_fest/src/features/menu/map/location.dart';
 import 'package:cofe_fest/src/features/menu/map/cluster_icon_painter.dart';
 import 'package:cofe_fest/src/features/menu/map/location_repository.dart';
-import 'package:cofe_fest/src/features/menu/map/location_bottom_sheet.dart';
-import 'package:cofe_fest/src/features/menu/map/location_list_screen.dart';
+import 'package:cofe_fest/src/features/menu/widgets/location_bottom_sheet.dart';
+import 'package:cofe_fest/src/features/menu/widgets/location_list_screen.dart';
 import 'package:location/location.dart' as loc;
 
 class MapScreen extends StatefulWidget {
