@@ -31,6 +31,7 @@ class _MapScreenState extends State<MapScreen> {
       if (permissionStatus == loc.PermissionStatus.granted) {
         final userLocation = await location.getLocation();
         if (userLocation.latitude != null && userLocation.longitude != null) {
+          if (!mounted) return; // Check if the widget is still mounted
           await _mapController.moveCamera(
             CameraUpdate.newCameraPosition(
               CameraPosition(
@@ -43,10 +44,12 @@ class _MapScreenState extends State<MapScreen> {
             ),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Местоположение пользователя недоступно')),
-          );
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('Местоположение пользователя недоступно')),
+            );
+          }
           if (locations.isNotEmpty) {
             await _mapController.moveCamera(
               CameraUpdate.newCameraPosition(
@@ -62,9 +65,11 @@ class _MapScreenState extends State<MapScreen> {
           }
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Доступ к геолокации запрещён')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Доступ к геолокации запрещён')),
+          );
+        }
         if (locations.isNotEmpty) {
           await _mapController.moveCamera(
             CameraUpdate.newCameraPosition(
@@ -80,10 +85,12 @@ class _MapScreenState extends State<MapScreen> {
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Не удалось получить геолокацию пользователя')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Не удалось получить геолокацию пользователя')),
+        );
+      }
       if (locations.isNotEmpty) {
         await _mapController.moveCamera(
           CameraUpdate.newCameraPosition(
@@ -165,14 +172,11 @@ class _MapScreenState extends State<MapScreen> {
               YandexMap(
                 onMapCreated: (controller) async {
                   _mapController = controller;
-
-                  // Получаем текущую геолокацию пользователя при создании карты
                   await _getUserLocation(locations);
                 },
                 mapObjects: [
                   _getClusterizedCollection(
-                    locations:
-                        locations, // Передаем список локаций для кластеризации
+                    locations: locations,
                   ),
                 ],
               ),
@@ -183,7 +187,6 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // Метод для получения кластеризованных маркеров
   ClusterizedPlacemarkCollection _getClusterizedCollection({
     required List<Location> locations,
   }) {
@@ -200,8 +203,7 @@ class _MapScreenState extends State<MapScreen> {
                 scale: 1.5,
               ),
             ),
-            onTap: (_, __) =>
-                _onPlacemarkTapped(location), // Обработка нажатия на маркер
+            onTap: (_, __) => _onPlacemarkTapped(location),
           ),
         )
         .toList();
@@ -209,8 +211,8 @@ class _MapScreenState extends State<MapScreen> {
     return ClusterizedPlacemarkCollection(
       mapId: const MapObjectId('clusterized-1'),
       placemarks: placemarks,
-      radius: 50, // Радиус для объединения маркеров в кластер
-      minZoom: 15, // Минимальный зум для кластеризации
+      radius: 50,
+      minZoom: 15,
       onClusterAdded: (self, cluster) async {
         return cluster.copyWith(
           appearance: cluster.appearance.copyWith(
@@ -227,31 +229,30 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // Метод для отображения BottomSheet с информацией о локации
   void _onPlacemarkTapped(Location location) async {
-    // Перемещаем камеру на координаты выбранного маркера
     await _mapController.moveCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: Point(latitude: location.lat, longitude: location.lng),
-          zoom: 15, // Можно установить нужный уровень зума
+          zoom: 15,
         ),
       ),
     );
 
-    // Показываем BottomSheet с информацией о локации
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => LocationBottomSheet(
-        location: location,
-        onSelect: () {
-          setState(() {
-            selectedLocation = location;
-          });
-          Navigator.pop(context); // Закрытие BottomSheet
-          Navigator.pop(context, location); // Возвращаем выбранную локацию
-        },
-      ),
-    );
+    if (mounted) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => LocationBottomSheet(
+          location: location,
+          onSelect: () {
+            setState(() {
+              selectedLocation = location;
+            });
+            Navigator.pop(context);
+            Navigator.pop(context, location);
+          },
+        ),
+      );
+    }
   }
 }
