@@ -2,19 +2,15 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-/// Класс для отрисовки кластеров на карте
 class ClusterIconPainter {
   const ClusterIconPainter(this.clusterSize);
 
-  /// Количество маркеров в кластере
   final int clusterSize;
 
-  /// Метод, который формирует фигуру кластера и преобразует ее в байтовый формат
   Future<Uint8List> getClusterIconBytes() async {
     const size = Size(150, 150);
     final recorder = PictureRecorder();
 
-    // Отрисовка маркера
     _paintTextCountPlacemarks(
       text: clusterSize.toString(),
       size: size,
@@ -24,7 +20,6 @@ class ClusterIconPainter {
       ),
     );
 
-    // Преобразование в байтовый формат
     final image = await recorder.endRecording().toImage(
           size.width.toInt(),
           size.height.toInt(),
@@ -35,7 +30,6 @@ class ClusterIconPainter {
   }
 }
 
-/// Метод, который отрисовывает фигуру кластера (фон и обводка)
 Canvas _paintCirclePlacemark({
   required Size size,
   required PictureRecorder recorder,
@@ -43,12 +37,10 @@ Canvas _paintCirclePlacemark({
   final canvas = Canvas(recorder);
   final radius = size.height / 2.15;
 
-  // Внутренний круг - закрашенная часть маркера
   final fillPaint = Paint()
     ..color = Colors.yellow
     ..style = PaintingStyle.fill;
 
-  // Внешний круг - обводка маркера
   final strokePaint = Paint()
     ..color = Colors.deepOrangeAccent
     ..style = PaintingStyle.stroke
@@ -62,7 +54,6 @@ Canvas _paintCirclePlacemark({
   return canvas;
 }
 
-/// Метод, который отрисовывает текст, отображающий количество маркеров в кластере
 void _paintTextCountPlacemarks({
   required String text,
   required Size size,

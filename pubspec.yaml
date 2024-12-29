@@ -21,7 +21,7 @@ dependencies:
   sqflite: ^2.3.3+1
   connectivity_plus: ^3.0.3
   yandex_mapkit: ^3.3.3
-
+  location: ^5.0.0
   shared_preferences: ^2.0.18
 
 dev_dependencies:

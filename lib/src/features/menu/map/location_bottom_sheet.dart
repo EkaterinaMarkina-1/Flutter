@@ -17,19 +17,14 @@ class LocationBottomSheet extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             location.address,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onSelect,
-              child: const Text('Выбрать'),
-            ),
+          ElevatedButton(
+            onPressed: onSelect,
+            child: const Text('Выбрать'),
           ),
         ],
       ),
