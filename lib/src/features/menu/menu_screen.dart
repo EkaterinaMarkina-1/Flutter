@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_bloc.dart';
 import 'package:cofe_fest/src/features/menu/bloc/menu_event.dart';
@@ -7,9 +8,9 @@ import 'package:cofe_fest/src/features/menu/widgets/category_button_widget.dart'
 import 'package:cofe_fest/src/features/menu/widgets/category_section_widget.dart';
 import 'package:cofe_fest/src/features/menu/widgets/item_card_widget.dart';
 import 'package:cofe_fest/src/features/menu/widgets/cart_button.dart';
-import 'package:cofe_fest/src/features/menu/widgets/cart_bottom_sheet.dart';
 import 'package:cofe_fest/src/theme/app_dimensions.dart';
 import 'package:cofe_fest/src/theme/app_colors.dart';
+import 'package:cofe_fest/src/features/menu/widgets/map_screen.dart';
 import 'cart/bloc/cart_bloc.dart';
 import 'cart/bloc/cart_event.dart';
 import 'bloc/models/menu_category_dto.dart';
@@ -22,6 +23,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  String selectedAddress = "";
   final Map<int, GlobalKey> categoryButtonKeys = {};
   final Map<int, GlobalKey> categorySectionKeys = {};
   int? currentCategoryId;
@@ -98,13 +100,23 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  void showCartBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return const CartBottomSheet();
-      },
+  void _navigateToMapScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MapScreen()),
     );
+
+    if (result != null) {
+      setState(() {
+        selectedAddress = result.address;
+      });
+      _saveAddress(result.address);
+    }
+  }
+
+  void _saveAddress(String address) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedAddress', address);
   }
 
   @override
@@ -112,6 +124,23 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.kAppBarColor,
+        leadingWidth: MediaQuery.of(context).size.width * 0.8,
+        leading: GestureDetector(
+          onTap: _navigateToMapScreen,
+          child: Row(
+            children: [
+              const Icon(Icons.location_on, color: Colors.white),
+              Expanded(
+                child: Text(
+                  selectedAddress.length > 15
+                      ? '${selectedAddress.substring(0, 15)}...'
+                      : selectedAddress,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
         flexibleSpace: Center(
           child: Image.asset(
             'assets/icon/icon.png',
@@ -123,7 +152,6 @@ class _MenuScreenState extends State<MenuScreen> {
         ],
       ),
       body: BlocBuilder<MenuBloc, MenuState>(
-        // Строим меню с продуктами
         builder: (context, state) {
           if (state is MenuLoadingState) {
             return const Center(child: CircularProgressIndicator());

@@ -1,4 +1,4 @@
-import 'package:cofe_fest/src/features/menu/bloc/interfaces/IMenuRepository.dart';
+import 'package:cofe_fest/src/features/menu/bloc/interfaces/i_menu_repository.dart';
 import 'package:cofe_fest/src/features/menu/data/data_sources/menu_data_source.dart';
 import 'package:cofe_fest/src/features/menu/data/database/sqlite.dart';
 import 'package:cofe_fest/src/features/menu/bloc/models/menu_category_dto.dart';
