@@ -31,7 +31,7 @@ class _MapScreenState extends State<MapScreen> {
       if (permissionStatus == loc.PermissionStatus.granted) {
         final userLocation = await location.getLocation();
         if (userLocation.latitude != null && userLocation.longitude != null) {
-          if (!mounted) return; // Check if the widget is still mounted
+          if (!mounted) return; 
           await _mapController.moveCamera(
             CameraUpdate.newCameraPosition(
               CameraPosition(
