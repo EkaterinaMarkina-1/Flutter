@@ -25,7 +25,7 @@ class _MapScreenState extends State<MapScreen> {
     location = loc.Location();
   }
 
-  Future<void> _getUserLocation() async {
+  Future<void> _getUserLocation(List<Location> locations) async {
     try {
       final permissionStatus = await location.requestPermission();
       if (permissionStatus == loc.PermissionStatus.granted) {
@@ -47,42 +47,80 @@ class _MapScreenState extends State<MapScreen> {
             const SnackBar(
                 content: Text('Местоположение пользователя недоступно')),
           );
+          if (locations.isNotEmpty) {
+            await _mapController.moveCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target: Point(
+                    latitude: locations.first.lat,
+                    longitude: locations.first.lng,
+                  ),
+                  zoom: 12,
+                ),
+              ),
+            );
+          }
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Доступ к геолокации запрещён')),
         );
+        if (locations.isNotEmpty) {
+          await _mapController.moveCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: Point(
+                  latitude: locations.first.lat,
+                  longitude: locations.first.lng,
+                ),
+                zoom: 12,
+              ),
+            ),
+          );
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Не удалось получить геолокацию пользователя')),
       );
+      if (locations.isNotEmpty) {
+        await _mapController.moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: Point(
+                latitude: locations.first.lat,
+                longitude: locations.first.lng,
+              ),
+              zoom: 12,
+            ),
+          ),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Расширяем тело экрана за пределы AppBar
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Устанавливаем прозрачный AppBar
-        elevation: 0, // Убираем тень у AppBar
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Возврат к предыдущему экрану
+            Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
             icon: Image.asset(
               'assets/icon/map.png',
-              width: 35, // Укажите желаемый размер
+              width: 35,
               height: 35,
             ),
             onPressed: () async {
-              // Навигация на экран с адресами
               final selectedLocation = await Navigator.push<Location>(
                 context,
                 MaterialPageRoute(
@@ -91,12 +129,10 @@ class _MapScreenState extends State<MapScreen> {
               );
 
               if (selectedLocation != null) {
-                // Если выбрали локацию, обновляем отображение
                 setState(() {
                   this.selectedLocation = selectedLocation;
                 });
 
-                // Перемещаем камеру на выбранную локацию
                 await _mapController.moveCamera(
                   CameraUpdate.newCameraPosition(
                     CameraPosition(
@@ -114,13 +150,10 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       body: FutureBuilder<List<Location>>(
-        future:
-            LocationRepository().fetchLocations(), // Получаем список локаций
+        future: LocationRepository().fetchLocations(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-                child:
-                    CircularProgressIndicator()); // Отображаем индикатор загрузки
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError || !snapshot.hasData) {
             return const Center(child: Text('Не удалось загрузить данные.'));
@@ -134,27 +167,12 @@ class _MapScreenState extends State<MapScreen> {
                   _mapController = controller;
 
                   // Получаем текущую геолокацию пользователя при создании карты
-                  await _getUserLocation();
-
-                  // Если геолокация недоступна, центрируем карту на первой локации из списка
-                  if (locations.isNotEmpty) {
-                    await _mapController.moveCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(
-                          target: Point(
-                            latitude: locations.first.lat,
-                            longitude: locations.first.lng,
-                          ),
-                          zoom: 12,
-                        ),
-                      ),
-                    );
-                  }
+                  await _getUserLocation(locations);
                 },
                 mapObjects: [
                   _getClusterizedCollection(
                     locations:
-                        locations, // Передаём список локаций для кластеризации
+                        locations, // Передаем список локаций для кластеризации
                   ),
                 ],
               ),
